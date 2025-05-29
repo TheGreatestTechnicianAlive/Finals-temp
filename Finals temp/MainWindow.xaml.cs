@@ -92,7 +92,9 @@ namespace Finals_temp
 
         private void signup_btn_Click(object sender, RoutedEventArgs e)
         {
-
+            SignUp signUpWindow = new SignUp();
+            signUpWindow.Show();
+            this.Close(); // Optional: close the current window if needed
         }
     }
 }
