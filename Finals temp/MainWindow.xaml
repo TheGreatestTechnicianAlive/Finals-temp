@@ -21,7 +21,7 @@
             <!-- Login & Sign Up Buttons -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,15,0,0">
                 <Button x:Name="login_btn" Content="Login" Width="100" Height="35" Click="login_btn_Click"/>
-                <Button x:Name="signup_btn" Content="Sign Up" Width="100" Height="35" Click="signup_btn_Click"/>
+
             </StackPanel>
 
             <!-- Divider -->
@@ -30,6 +30,13 @@
             <!-- Google Sign-In -->
             <Button Content="Sign in with Google" Height="40" Background="#4285F4" Foreground="White"
                     Click="LoginButton_Click" FontWeight="Bold"/>
+            <TextBlock Text="Don't have an account? Sign Up" 
+HorizontalAlignment="Center" 
+Margin="0,15,0,0"
+Foreground="#0078D7"
+FontSize="12"
+Cursor="Hand"
+MouseLeftButtonDown="signup_btn_Click"/>
 
             <!-- Status Message -->
             <TextBlock x:Name="StatusText" TextAlignment="Center" Foreground="Red" Margin="0,10,0,0"/>

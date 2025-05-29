@@ -14,7 +14,7 @@
         <ProgressBar HorizontalAlignment="Left" Height="10" Margin="309,95,0,0" VerticalAlignment="Top" Width="100"/>
         <Label Content="3000" HorizontalAlignment="Left" Margin="85,40,0,0" VerticalAlignment="Top" Height="92" Width="140" FontSize="48"/>-->
 
-        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+        <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Margin="20,21,0,0">
             <TextBlock x:Name="WelcomeText" FontSize="16" TextAlignment="Center" Margin="10"/>
             <Button Content="Logout" Click="LogoutButton_Click" Width="150" Margin="10"/>
         </StackPanel>
