@@ -56,7 +56,6 @@ namespace Finals_temp
                 }
 
                 var payload = await GoogleJsonWebSignature.ValidateAsync(credential.Token.IdToken);
-                StatusText.Text = $"Welcome {payload.Name} ({payload.Email})";
 
                 OpenHomeWindow(payload.Name, payload.Email);
 
