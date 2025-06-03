@@ -53,7 +53,6 @@ namespace Finals_temp
 
             Directory.Delete(tokenPath, true);
             MessageBox.Show("Logged out successfully!");
-            // Go back to login window
             new MainWindow().Show();
             this.Close();
 
@@ -80,8 +79,10 @@ namespace Finals_temp
 
         private void AddExpense_Click(object sender, RoutedEventArgs e)
         {
-
+            AddExpense addExpenseWindow = new AddExpense();
+            addExpenseWindow.Show(); // use ShowDialog() for modal window
         }
+
     }
 
 
