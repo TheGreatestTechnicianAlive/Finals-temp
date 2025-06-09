@@ -16,7 +16,23 @@
 
             <!-- Password -->
             <TextBlock Text="Password" Margin="0,10,0,0" FontWeight="Bold"/>
-            <PasswordBox x:Name="pass_txt" Height="30"/>
+            <Grid>
+                <!-- Hidden Password -->
+                <PasswordBox x:Name="pass_txt" Height="30" Padding="5,0,35,0" Visibility="Visible"/>
+
+                <!-- Visible Password -->
+                <TextBox x:Name="VisiblePasswordBox" Height="30" Padding="5,0,35,0" Visibility="Collapsed"/>
+
+                <!-- Toggle Button -->
+                <ToggleButton x:Name="ShowPasswordToggle" Content="👁" Width="25" Height="25"
+                  HorizontalAlignment="Right" VerticalAlignment="Center"
+                  Checked="ShowPasswordToggle_Checked"
+                  Unchecked="ShowPasswordToggle_Unchecked"
+                  Cursor="Hand"
+                  ToolTip="Show/Hide Password"
+                  Background="Transparent" BorderBrush="Transparent"/>
+            </Grid>
+
 
             <!-- Login & Sign Up Buttons -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,15,0,0">

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -8,11 +10,15 @@ namespace Finals_temp
 {
     public partial class AddExpense : Window
     {
+        DataClasses2DataContext db = new DataClasses2DataContext(Properties.Settings.Default.Expense_TrackerConnectionString);
         private StringBuilder _inputBuilder = new StringBuilder();
 
-        public AddExpense()
+        string _Account;
+
+        public AddExpense(string account)
         {
             InitializeComponent();
+            _Account = account;
         }
 
         public string AmountDisplay
@@ -79,14 +85,79 @@ namespace Finals_temp
         private void SaveExpense_Click(object sender, RoutedEventArgs e)
         {
             // Remove ₱ and commas from amount for clean value
-            string amount = AmountText.Text.Replace("₱", "").Replace(",", "");
+            string amountStr = AmountText.Text.Replace("₱", "").Replace(",", "");
             string notes = NotesTextBox.Text.Trim();
+            if (notes == "Add notes") notes = "";
 
             ComboBoxItem selectedItem = CategoryComboBox.SelectedItem as ComboBoxItem;
-            string category = selectedItem?.Content.ToString() ?? "Other";
+            string categoryName = selectedItem?.Content.ToString() ?? "Other";
 
-            MessageBox.Show($"Saved:\nCategory: {category}\nAmount: ₱{amount}\nNotes: {notes}",
-                            "Expense Saved", MessageBoxButton.OK, MessageBoxImage.Information);
+            string categoryID;
+            if (categoryName == "💡 Utilities")
+                categoryID = "C01";
+            else if (categoryName == "🚗 Transportation")
+                categoryID = "C02";
+            else if (categoryName == "🍽 Food")
+                categoryID = "C03";
+            else
+                categoryID = "C04";
+
+
+            if (decimal.TryParse(amountStr, out decimal amountDecimal))
+            {
+                try
+                {
+                    // Generate new Expense_ID like E1, E2, E3...
+                    int lastNum = 0;
+
+                    // Get all existing Expense_IDs from DB
+                    var allIds = db.ExpenseTables
+                                   .Select(x => x.Expense_ID)
+                                   .ToList();
+
+                    var idNumbers = new List<int>();
+                    foreach (var id in allIds)
+                    {
+                        if (id.StartsWith("E") && int.TryParse(id.Substring(1), out int num))
+                        {
+                            idNumbers.Add(num);
+                        }
+                    }
+
+                    if (idNumbers.Any())
+                        lastNum = idNumbers.Max();
+
+                    string newId = "E" + (lastNum + 1);
+
+                    // Create new expense record
+                    ExpenseTable newExpense = new ExpenseTable
+                    {
+                        Expense_ID = newId,
+                        Account = _Account,
+                        Category_ID = categoryID,
+                        Date = DateTime.Today,
+                        Amount = (int)amountDecimal,
+                        Notes = notes
+                    };
+
+                    // Save to DB
+                    db.ExpenseTables.InsertOnSubmit(newExpense);
+                    db.SubmitChanges();
+
+                    // Confirmation
+                    MessageBox.Show($"Saved:\nID: {newId}\nCategory: {categoryName} ({categoryID})\nAmount: ₱{amountDecimal:N2}\nNotes: {notes}",
+                                    "Expense Saved", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Failed to save expense: " + ex.Message,
+                                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Invalid amount format.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
 
             // Reset fields
             _inputBuilder.Clear();
@@ -94,5 +165,7 @@ namespace Finals_temp
             NotesTextBox.Text = "";
             CategoryComboBox.SelectedIndex = -1;
         }
+
+
     }
 }

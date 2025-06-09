@@ -54,7 +54,7 @@
                         Foreground="White" 
                         FontWeight="Bold"
                         Cursor="Hand"
-                        Margin="0,20,0,0"/>
+                        Margin="0,20,0,0" Click="Button_Click"/>
 
                 <TextBlock Text="Already have an account? Log in" 
                 HorizontalAlignment="Center" 

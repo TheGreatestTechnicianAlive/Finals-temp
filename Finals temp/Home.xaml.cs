@@ -23,21 +23,58 @@ namespace Finals_temp
     /// </summary>
     public partial class Home : Window
     {
+        DataClasses2DataContext db = new DataClasses2DataContext(Properties.Settings.Default.Expense_TrackerConnectionString);
         private decimal _cashAmount = 0.00m;
+        bool google;
+        string _Account;
 
-        public Home(string name, string email)
+        public Home(string account, string name, string email, decimal balance, bool flag)
         {
             InitializeComponent();
             DataContext = new HomeViewModel();
+
+            _cashAmount = balance; // Set the balance
             WelcomeText.Text = $"Welcome {name}!\nEmail: {email}";
+
+            _Account = account;
+            google = flag;
+
             UpdateCashAmountDisplay();
         }
+
 
         private void AddCashButton_Click(object sender, RoutedEventArgs e)
         {
             _cashAmount += 500;
             UpdateCashAmountDisplay();
+
+            try
+            {
+                // Find the user by Account (assuming _Account holds UserID or Username)
+                var user1 = db.Users.FirstOrDefault(u => u.UserID == _Account);
+
+                var user2 = db.GoogleUsers.FirstOrDefault(u => u.GoogleUserID == _Account);
+                if (user1 != null)
+                {
+                    user1.Balance += 500; // Add 500 to existing balance
+                    db.SubmitChanges();
+                }
+                else if (user2 != null)
+                {
+                    user2.Balance += 500; // Add 500 to existing balance
+                    db.SubmitChanges();
+                }
+                else
+                {
+                    MessageBox.Show("User not found in database.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error updating balance: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
+
 
         private void UpdateCashAmountDisplay()
         {
@@ -51,7 +88,9 @@ namespace Finals_temp
                 "GoogleLoginDemoTokens"
             );
 
-            Directory.Delete(tokenPath, true);
+            if(google)
+                Directory.Delete(tokenPath, true);
+
             MessageBox.Show("Logged out successfully!");
             new MainWindow().Show();
             this.Close();
@@ -79,7 +118,7 @@ namespace Finals_temp
 
         private void AddExpense_Click(object sender, RoutedEventArgs e)
         {
-            AddExpense addExpenseWindow = new AddExpense();
+            AddExpense addExpenseWindow = new AddExpense(_Account);
             addExpenseWindow.Show(); // use ShowDialog() for modal window
         }
 

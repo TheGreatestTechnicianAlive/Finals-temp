@@ -54,7 +54,7 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Text="Cash"
+                    <TextBlock Text="Allowance"
                                Foreground="Gray"
                                FontSize="14"
                                VerticalAlignment="Center" />
@@ -84,7 +84,7 @@
                     Orientation="Horizontal"
                     HorizontalAlignment="Center"
                     Margin="0,10,0,20">
-            <Button Content="Add Currency"
+            <Button Content="Add Balance"
                     Width="130"
                     Height="40"
                     Margin="0,0,10,0"
