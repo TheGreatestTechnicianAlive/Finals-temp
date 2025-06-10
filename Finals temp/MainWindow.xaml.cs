@@ -140,7 +140,12 @@ namespace Finals_temp
                 {
                     // Successful login
                     MessageBox.Show("Login successful!", "Welcome", MessageBoxButton.OK, MessageBoxImage.Information);
-                    var homeWindow = new Home(user.UserID, user.Username, user.Email, 0.00m, false); // Replace 0.00m with real balance if available
+                    var homeWindow = new Home(
+                        user.UserID,
+                        user.Username,
+                        user.Email,
+                        (decimal)(user.Balance ?? 0), // Convert int? to decimal safely
+                        false);
                     homeWindow.Show();
                     this.Close();
                 }

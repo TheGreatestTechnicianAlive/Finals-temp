@@ -36,12 +36,12 @@ namespace Finals_temp
     partial void InsertCategoryTable(CategoryTable instance);
     partial void UpdateCategoryTable(CategoryTable instance);
     partial void DeleteCategoryTable(CategoryTable instance);
-    partial void InsertExpenseTable(ExpenseTable instance);
-    partial void UpdateExpenseTable(ExpenseTable instance);
-    partial void DeleteExpenseTable(ExpenseTable instance);
     partial void InsertGoogleUser(GoogleUser instance);
     partial void UpdateGoogleUser(GoogleUser instance);
     partial void DeleteGoogleUser(GoogleUser instance);
+    partial void InsertExpenseTable(ExpenseTable instance);
+    partial void UpdateExpenseTable(ExpenseTable instance);
+    partial void DeleteExpenseTable(ExpenseTable instance);
     #endregion
 		
 		public DataClasses2DataContext() : 
@@ -90,19 +90,19 @@ namespace Finals_temp
 			}
 		}
 		
-		public System.Data.Linq.Table<ExpenseTable> ExpenseTables
-		{
-			get
-			{
-				return this.GetTable<ExpenseTable>();
-			}
-		}
-		
 		public System.Data.Linq.Table<GoogleUser> GoogleUsers
 		{
 			get
 			{
 				return this.GetTable<GoogleUser>();
+			}
+		}
+		
+		public System.Data.Linq.Table<ExpenseTable> ExpenseTables
+		{
+			get
+			{
+				return this.GetTable<ExpenseTable>();
 			}
 		}
 	}
@@ -351,188 +351,6 @@ namespace Finals_temp
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ExpenseTable")]
-	public partial class ExpenseTable : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private string _Expense_ID;
-		
-		private string _Account;
-		
-		private string _Category_ID;
-		
-		private System.DateTime _Date;
-		
-		private int _Amount;
-		
-		private string _Notes;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnExpense_IDChanging(string value);
-    partial void OnExpense_IDChanged();
-    partial void OnAccountChanging(string value);
-    partial void OnAccountChanged();
-    partial void OnCategory_IDChanging(string value);
-    partial void OnCategory_IDChanged();
-    partial void OnDateChanging(System.DateTime value);
-    partial void OnDateChanged();
-    partial void OnAmountChanging(int value);
-    partial void OnAmountChanged();
-    partial void OnNotesChanging(string value);
-    partial void OnNotesChanged();
-    #endregion
-		
-		public ExpenseTable()
-		{
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Expense_ID", DbType="NVarChar(50) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
-		public string Expense_ID
-		{
-			get
-			{
-				return this._Expense_ID;
-			}
-			set
-			{
-				if ((this._Expense_ID != value))
-				{
-					this.OnExpense_IDChanging(value);
-					this.SendPropertyChanging();
-					this._Expense_ID = value;
-					this.SendPropertyChanged("Expense_ID");
-					this.OnExpense_IDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Account", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
-		public string Account
-		{
-			get
-			{
-				return this._Account;
-			}
-			set
-			{
-				if ((this._Account != value))
-				{
-					this.OnAccountChanging(value);
-					this.SendPropertyChanging();
-					this._Account = value;
-					this.SendPropertyChanged("Account");
-					this.OnAccountChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Category_ID", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
-		public string Category_ID
-		{
-			get
-			{
-				return this._Category_ID;
-			}
-			set
-			{
-				if ((this._Category_ID != value))
-				{
-					this.OnCategory_IDChanging(value);
-					this.SendPropertyChanging();
-					this._Category_ID = value;
-					this.SendPropertyChanged("Category_ID");
-					this.OnCategory_IDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Date", DbType="Date NOT NULL")]
-		public System.DateTime Date
-		{
-			get
-			{
-				return this._Date;
-			}
-			set
-			{
-				if ((this._Date != value))
-				{
-					this.OnDateChanging(value);
-					this.SendPropertyChanging();
-					this._Date = value;
-					this.SendPropertyChanged("Date");
-					this.OnDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Amount", DbType="Int NOT NULL")]
-		public int Amount
-		{
-			get
-			{
-				return this._Amount;
-			}
-			set
-			{
-				if ((this._Amount != value))
-				{
-					this.OnAmountChanging(value);
-					this.SendPropertyChanging();
-					this._Amount = value;
-					this.SendPropertyChanged("Amount");
-					this.OnAmountChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Notes", DbType="NVarChar(100)")]
-		public string Notes
-		{
-			get
-			{
-				return this._Notes;
-			}
-			set
-			{
-				if ((this._Notes != value))
-				{
-					this.OnNotesChanging(value);
-					this.SendPropertyChanging();
-					this._Notes = value;
-					this.SendPropertyChanged("Notes");
-					this.OnNotesChanged();
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.GoogleUser")]
 	public partial class GoogleUser : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -642,6 +460,188 @@ namespace Finals_temp
 					this._Balance = value;
 					this.SendPropertyChanged("Balance");
 					this.OnBalanceChanged();
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ExpenseTable")]
+	public partial class ExpenseTable : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private string _Expense_ID;
+		
+		private string _Account;
+		
+		private string _Category_ID;
+		
+		private System.DateTime _Date;
+		
+		private decimal _Amount;
+		
+		private string _Notes;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnExpense_IDChanging(string value);
+    partial void OnExpense_IDChanged();
+    partial void OnAccountChanging(string value);
+    partial void OnAccountChanged();
+    partial void OnCategory_IDChanging(string value);
+    partial void OnCategory_IDChanged();
+    partial void OnDateChanging(System.DateTime value);
+    partial void OnDateChanged();
+    partial void OnAmountChanging(decimal value);
+    partial void OnAmountChanged();
+    partial void OnNotesChanging(string value);
+    partial void OnNotesChanged();
+    #endregion
+		
+		public ExpenseTable()
+		{
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Expense_ID", DbType="NVarChar(50) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		public string Expense_ID
+		{
+			get
+			{
+				return this._Expense_ID;
+			}
+			set
+			{
+				if ((this._Expense_ID != value))
+				{
+					this.OnExpense_IDChanging(value);
+					this.SendPropertyChanging();
+					this._Expense_ID = value;
+					this.SendPropertyChanged("Expense_ID");
+					this.OnExpense_IDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Account", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string Account
+		{
+			get
+			{
+				return this._Account;
+			}
+			set
+			{
+				if ((this._Account != value))
+				{
+					this.OnAccountChanging(value);
+					this.SendPropertyChanging();
+					this._Account = value;
+					this.SendPropertyChanged("Account");
+					this.OnAccountChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Category_ID", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string Category_ID
+		{
+			get
+			{
+				return this._Category_ID;
+			}
+			set
+			{
+				if ((this._Category_ID != value))
+				{
+					this.OnCategory_IDChanging(value);
+					this.SendPropertyChanging();
+					this._Category_ID = value;
+					this.SendPropertyChanged("Category_ID");
+					this.OnCategory_IDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Date", DbType="Date NOT NULL")]
+		public System.DateTime Date
+		{
+			get
+			{
+				return this._Date;
+			}
+			set
+			{
+				if ((this._Date != value))
+				{
+					this.OnDateChanging(value);
+					this.SendPropertyChanging();
+					this._Date = value;
+					this.SendPropertyChanged("Date");
+					this.OnDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Amount", DbType="Decimal(18,2) NOT NULL")]
+		public decimal Amount
+		{
+			get
+			{
+				return this._Amount;
+			}
+			set
+			{
+				if ((this._Amount != value))
+				{
+					this.OnAmountChanging(value);
+					this.SendPropertyChanging();
+					this._Amount = value;
+					this.SendPropertyChanged("Amount");
+					this.OnAmountChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Notes", DbType="NVarChar(100)")]
+		public string Notes
+		{
+			get
+			{
+				return this._Notes;
+			}
+			set
+			{
+				if ((this._Notes != value))
+				{
+					this.OnNotesChanging(value);
+					this.SendPropertyChanging();
+					this._Notes = value;
+					this.SendPropertyChanged("Notes");
+					this.OnNotesChanged();
 				}
 			}
 		}

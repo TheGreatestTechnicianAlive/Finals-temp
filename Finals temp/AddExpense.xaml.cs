@@ -12,6 +12,7 @@ namespace Finals_temp
     {
         DataClasses2DataContext db = new DataClasses2DataContext(Properties.Settings.Default.Expense_TrackerConnectionString);
         private StringBuilder _inputBuilder = new StringBuilder();
+        public decimal ExpenseAmount { get; private set; } = 0m;
 
         string _Account;
 
@@ -19,6 +20,7 @@ namespace Finals_temp
         {
             InitializeComponent();
             _Account = account;
+
         }
 
         public string AmountDisplay
@@ -94,13 +96,13 @@ namespace Finals_temp
 
             string categoryID;
             if (categoryName == "💡 Utilities")
-                categoryID = "C01";
-            else if (categoryName == "🚗 Transportation")
                 categoryID = "C02";
-            else if (categoryName == "🍽 Food")
+            else if (categoryName == "🚗 Transportation")
                 categoryID = "C03";
-            else
+            else if (categoryName == "🍽 Food")
                 categoryID = "C04";
+            else
+                categoryID = "C05";
 
 
             if (decimal.TryParse(amountStr, out decimal amountDecimal))
@@ -136,9 +138,12 @@ namespace Finals_temp
                         Account = _Account,
                         Category_ID = categoryID,
                         Date = DateTime.Today,
-                        Amount = (int)amountDecimal,
+                        Amount = amountDecimal,
                         Notes = notes
                     };
+                    ExpenseAmount = amountDecimal;
+                    this.DialogResult = true;
+                    this.Close();
 
                     // Save to DB
                     db.ExpenseTables.InsertOnSubmit(newExpense);
