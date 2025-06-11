@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.IO;
-using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore;
+using LiveChartsCore.SkiaSharpView;
 using System.ComponentModel;
+using System.Collections.ObjectModel;
+using System.Windows.Media;
+using LiveChartsCore.SkiaSharpView.Painting;
+using SkiaSharp;
 
 namespace Finals_temp
 {
@@ -80,8 +82,7 @@ namespace Finals_temp
 
                 RefreshBalanceFromDatabase();
 
-                // 🔁 Refresh pie chart after new expense
-                _viewModel.RefreshPieChart(_Account);
+                _viewModel.RefreshPieChart(_viewModel.CurrentFilter);
             }
         }
 
@@ -119,30 +120,106 @@ namespace Finals_temp
             new MainWindow().Show();
             this.Close();
         }
+
+        private void NotificationsButton_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Notifications clicked.");
+        }
+
+        private void HomeButton_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Home clicked.");
+        }
+
+        private void OptionsButton_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Options clicked.");
+        }
+
+        private void DateFilterComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (DateFilterComboBox.SelectedItem is ComboBoxItem selectedItem)
+            {
+                string selectedFilter = selectedItem.Content.ToString();
+
+                if (_viewModel != null)
+                {
+                    _viewModel.ApplyDateFilter(selectedFilter);
+                }
+            }
+        }
     }
 
     public class HomeViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public IEnumerable<ISeries> PieSeries { get; set; }
+        private ObservableCollection<ISeries> _pieSeries;
+        public ObservableCollection<ISeries> PieSeries
+        {
+            get => _pieSeries;
+            set
+            {
+                _pieSeries = value;
+                OnPropertyChanged(nameof(PieSeries));
+            }
+        }
+
+        public string CurrentFilter { get; private set; } = "Today";
+        private readonly string _account;
+        public decimal TotalAmount { get; private set; }
 
         public HomeViewModel(string account)
         {
-            LoadPieChart(account);
+            _account = account;
+            LoadPieChart(CurrentFilter); // Default is "Today"
         }
 
-        public void RefreshPieChart(string account)
+        public void ApplyDateFilter(string filter)
         {
-            LoadPieChart(account);
+            CurrentFilter = filter;
+            LoadPieChart(filter);
         }
 
-        private void LoadPieChart(string account)
+        public void RefreshPieChart(string filter)
+        {
+            LoadPieChart(filter);
+        }
+
+        private void LoadPieChart(string filter)
         {
             using (var db = new DataClasses2DataContext(Properties.Settings.Default.Expense_TrackerConnectionString))
             {
-                var expenses = db.ExpenseTables
-                    .Where(e => e.Account == account)
+                var allowedCategories = new[] { "C02", "C03", "C04", "C05" };
+                var today = DateTime.Today;
+
+                IQueryable<ExpenseTable> query = db.ExpenseTables
+                    .Where(e => e.Account == _account && allowedCategories.Contains(e.Category_ID));
+
+                switch (filter)
+                {
+                    case "Today":
+                        query = query.Where(e => e.Date == today);
+                        break;
+                    case "This Week":
+                        var startOfWeek = today.AddDays(-(int)today.DayOfWeek);
+                        query = query.Where(e => e.Date >= startOfWeek && e.Date <= today);
+                        break;
+                    case "This Month":
+                        var startOfMonth = new DateTime(today.Year, today.Month, 1);
+                        query = query.Where(e => e.Date >= startOfMonth && e.Date <= today);
+                        break;
+                    case "This Year":
+                        var startOfYear = new DateTime(today.Year, 1, 1);
+                        query = query.Where(e => e.Date >= startOfYear && e.Date <= today);
+                        break;
+                    case "All Time":
+                    default:
+                        // no date filter
+                        break;
+                }
+
+                var expenses = query
                     .GroupBy(e => e.Category_ID)
                     .Select(g => new
                     {
@@ -151,41 +228,57 @@ namespace Finals_temp
                     })
                     .ToList();
 
-                var total = expenses.Sum(x => x.TotalAmount);
+                TotalAmount = expenses.Sum(e => e.TotalAmount);
 
                 var categoryNames = db.CategoryTables
+                    .Where(c => allowedCategories.Contains(c.Category_ID))
                     .ToDictionary(c => c.Category_ID, c => c.Category_Desc);
 
-                if (total == 0 || !expenses.Any())
+                // Fixed color for each category
+                var categoryColors = new Dictionary<string, SKColor>
+        {
+            { "C02", SKColors.Red },       // Transport
+            { "C03", SKColors.RoyalBlue},      // Utilities
+            { "C04", SKColors.YellowGreen },    // Other
+            { "C05", SKColors.MediumBlue }      // Food
+        };
+
+                if (TotalAmount == 0 || !expenses.Any())
                 {
-                    PieSeries = new List<ISeries>
+                    PieSeries = new ObservableCollection<ISeries>
             {
                 new PieSeries<double>
                 {
                     Values = new double[] { 100 },
                     Name = "No Data",
                     DataLabelsSize = 14,
-                    DataLabelsFormatter = point => $"{point.Model}%"
+                    DataLabelsFormatter = point => $"{point.Model}%",
+                    Fill = new SolidColorPaint(SKColors.LightGray)
                 }
             };
                 }
                 else
                 {
-                    PieSeries = expenses.Select(e =>
-                    {
-                        double percentage = Math.Round((double)(e.TotalAmount / total * 100), 2);
-                        return new PieSeries<double>
+                    PieSeries = new ObservableCollection<ISeries>(
+                        expenses.Select(e =>
                         {
-                            Values = new[] { percentage },
-                            Name = categoryNames.ContainsKey(e.Category) ? categoryNames[e.Category] : "Unknown",
-                            DataLabelsSize = 14,
-                            DataLabelsFormatter = point => $"{point.Model}%"
-                        };
-                    }).ToList();
-                }
-            }
+                            double percent = Math.Round((double)(e.TotalAmount / TotalAmount * 100), 2);
+                            var color = categoryColors.ContainsKey(e.Category) ? categoryColors[e.Category] : SKColors.Gray;
 
-            OnPropertyChanged(nameof(PieSeries));
+                            return new PieSeries<double>
+                            {
+                                Values = new[] { percent },
+                                Name = categoryNames.ContainsKey(e.Category) ? categoryNames[e.Category] : "Unknown",
+                                DataLabelsSize = 14,
+                                DataLabelsFormatter = point => $"{point.Model}%",
+                                Fill = new SolidColorPaint(color)
+                            };
+                        })
+                    );
+                }
+
+                OnPropertyChanged(nameof(TotalAmount));
+            }
         }
 
 
