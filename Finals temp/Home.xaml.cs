@@ -19,6 +19,8 @@ namespace Finals_temp
         bool google;
         string _Account;
 
+        private HomeViewModel _viewModel;
+
         public Home(string account, string name, string email, decimal balance, bool flag)
         {
             InitializeComponent();
@@ -29,7 +31,8 @@ namespace Finals_temp
             WelcomeText.Text = $"Welcome {name}!\nEmail: {email}";
             UpdateCashAmountDisplay();
 
-            DataContext = new HomeViewModel(); // Pass account to ViewModel
+            _viewModel = new HomeViewModel(_Account);
+            DataContext = _viewModel;
         }
 
         private void AddCashButton_Click(object sender, RoutedEventArgs e)
@@ -39,7 +42,7 @@ namespace Finals_temp
 
             if (result == true)
             {
-                RefreshBalanceFromDatabase(); // Always update latest balance from DB
+                RefreshBalanceFromDatabase();
             }
         }
 
@@ -75,7 +78,10 @@ namespace Finals_temp
                     MessageBox.Show("Error updating balance after expense: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
 
-                RefreshBalanceFromDatabase(); // Ensure display is consistent
+                RefreshBalanceFromDatabase();
+
+                // 🔁 Refresh pie chart after new expense
+                _viewModel.RefreshPieChart(_Account);
             }
         }
 
@@ -121,15 +127,71 @@ namespace Finals_temp
 
         public IEnumerable<ISeries> PieSeries { get; set; }
 
-        public HomeViewModel()
+        public HomeViewModel(string account)
         {
-            PieSeries = new ISeries[]
+            LoadPieChart(account);
+        }
+
+        public void RefreshPieChart(string account)
+        {
+            LoadPieChart(account);
+        }
+
+        private void LoadPieChart(string account)
+        {
+            using (var db = new DataClasses2DataContext(Properties.Settings.Default.Expense_TrackerConnectionString))
             {
-                new PieSeries<double> { Values = new double[] { 10 }, Name = "Utilities" },
-                new PieSeries<double> { Values = new double[] { 20 }, Name = "Transport" },
-                new PieSeries<double> { Values = new double[] { 30 }, Name = "Food" },
-                new PieSeries<double> { Values = new double[] { 40 }, Name = "Other" }
+                var expenses = db.ExpenseTables
+                    .Where(e => e.Account == account)
+                    .GroupBy(e => e.Category_ID)
+                    .Select(g => new
+                    {
+                        Category = g.Key,
+                        TotalAmount = g.Sum(e => (decimal?)e.Amount ?? 0)
+                    })
+                    .ToList();
+
+                var total = expenses.Sum(x => x.TotalAmount);
+
+                var categoryNames = db.CategoryTables
+                    .ToDictionary(c => c.Category_ID, c => c.Category_Desc);
+
+                if (total == 0 || !expenses.Any())
+                {
+                    PieSeries = new List<ISeries>
+            {
+                new PieSeries<double>
+                {
+                    Values = new double[] { 100 },
+                    Name = "No Data",
+                    DataLabelsSize = 14,
+                    DataLabelsFormatter = point => $"{point.Model}%"
+                }
             };
+                }
+                else
+                {
+                    PieSeries = expenses.Select(e =>
+                    {
+                        double percentage = Math.Round((double)(e.TotalAmount / total * 100), 2);
+                        return new PieSeries<double>
+                        {
+                            Values = new[] { percentage },
+                            Name = categoryNames.ContainsKey(e.Category) ? categoryNames[e.Category] : "Unknown",
+                            DataLabelsSize = 14,
+                            DataLabelsFormatter = point => $"{point.Model}%"
+                        };
+                    }).ToList();
+                }
+            }
+
+            OnPropertyChanged(nameof(PieSeries));
+        }
+
+
+        private void OnPropertyChanged(string name)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 }

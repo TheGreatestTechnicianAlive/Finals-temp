@@ -47,6 +47,28 @@ namespace Finals_temp
                         return;
                     }
 
+                    // Generate new Expense_ID
+                    var allIds = db.ExpenseTables.Select(x => x.Expense_ID).ToList();
+                    int lastNum = allIds
+                        .Where(id => id.StartsWith("E") && int.TryParse(id.Substring(1), out _))
+                        .Select(id => int.Parse(id.Substring(1)))
+                        .DefaultIfEmpty(0)
+                        .Max();
+                    string newId = "E" + (lastNum + 1);
+
+                    // Create allowance record in ExpenseTable with Category_ID = "C01"
+                    var allowanceExpense = new ExpenseTable
+                    {
+                        Expense_ID = newId,
+                        Account = _account,
+                        Category_ID = "C01", // Allowance
+                        Date = DateTime.Today,
+                        Amount = addedAmount,
+                        Notes = NotesTextBox.Text
+                    };
+
+                    db.ExpenseTables.InsertOnSubmit(allowanceExpense);
+
                     db.SubmitChanges();
 
                     MessageBox.Show($"₱{addedAmount:N2} added to balance!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -63,6 +85,7 @@ namespace Finals_temp
                 MessageBox.Show("Please enter a valid positive amount.", "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
+
 
         private void NumberButton_Click(object sender, RoutedEventArgs e)
         {

@@ -143,7 +143,7 @@ namespace Finals_temp
                     };
                     ExpenseAmount = amountDecimal;
                     this.DialogResult = true;
-                    this.Close();
+                    //this.Close();
 
                     // Save to DB
                     db.ExpenseTables.InsertOnSubmit(newExpense);
