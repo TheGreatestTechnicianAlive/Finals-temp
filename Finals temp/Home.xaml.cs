@@ -119,7 +119,7 @@ namespace Finals_temp
             MessageBox.Show("Logged out successfully!");
             new MainWindow().Show();
             this.Close();
-        }
+        } 
 
         private void NotificationsButton_Click(object sender, RoutedEventArgs e)
         {
