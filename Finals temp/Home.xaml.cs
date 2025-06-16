@@ -18,18 +18,24 @@ namespace Finals_temp
     {
         DataClasses2DataContext db = new DataClasses2DataContext(Properties.Settings.Default.Expense_TrackerConnectionString);
         private decimal _cashAmount = 0.00m;
-        bool google;
-        string _Account;
+        private bool google;
+        private string _Account;
+        private string _username;
+        private string _email;
 
         private HomeViewModel _viewModel;
 
         public Home(string account, string name, string email, decimal balance, bool flag)
         {
             InitializeComponent();
+
             _Account = account;
+            _username = name;
+            _email = email;
             google = flag;
 
             _cashAmount = balance;
+
             WelcomeText.Text = $"Welcome {name}!\nEmail: {email}";
             UpdateCashAmountDisplay();
 
@@ -37,9 +43,10 @@ namespace Finals_temp
             DataContext = _viewModel;
         }
 
+
         private void AddCashButton_Click(object sender, RoutedEventArgs e)
         {
-            AddBalance addBalanceWindow = new AddBalance(_Account);
+            AddBalance addBalanceWindow = new AddBalance(_Account, _username, _email, _cashAmount, google);
             bool? result = addBalanceWindow.ShowDialog();
 
             if (result == true)
@@ -50,7 +57,7 @@ namespace Finals_temp
 
         private void AddExpense_Click(object sender, RoutedEventArgs e)
         {
-            AddExpense addExpenseWindow = new AddExpense(_Account);
+            AddExpense addExpenseWindow = new AddExpense(_Account, _username, _email, _cashAmount, google);
             bool? result = addExpenseWindow.ShowDialog();
 
             if (result == true)
@@ -121,11 +128,6 @@ namespace Finals_temp
             this.Close();
         } 
 
-        private void NotificationsButton_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Notifications clicked.");
-        }
-
         private void HomeButton_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Home clicked.");
@@ -134,6 +136,13 @@ namespace Finals_temp
         private void OptionsButton_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Options clicked.");
+        }
+
+        private void TransactionsButton_Click(object sender, RoutedEventArgs e)
+        {
+            var transactionWindow = new Transaction(_Account, _username, _email, _cashAmount, google);
+            transactionWindow.ShowDialog();
+            this.Close();
         }
 
         private void DateFilterComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

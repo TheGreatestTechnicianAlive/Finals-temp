@@ -14,12 +14,20 @@ namespace Finals_temp
         private StringBuilder _inputBuilder = new StringBuilder();
         public decimal ExpenseAmount { get; private set; } = 0m;
 
-        string _Account;
+        private string _account;
+        private string _username;
+        private string _email;
+        private decimal _balance;
+        private bool _isGoogleUser;
 
-        public AddExpense(string account)
+        public AddExpense(string account, string username, string email, decimal balance, bool isGoogleUser)
         {
             InitializeComponent();
-            _Account = account;
+            _account = account;
+            _username = username;
+            _email = email;
+            _balance = balance;
+            _isGoogleUser = isGoogleUser;
 
         }
 
@@ -135,7 +143,7 @@ namespace Finals_temp
                     ExpenseTable newExpense = new ExpenseTable
                     {
                         Expense_ID = newId,
-                        Account = _Account,
+                        Account = _account,
                         Category_ID = categoryID,
                         Date = DateTime.Today,
                         Amount = amountDecimal,
@@ -171,6 +179,11 @@ namespace Finals_temp
             CategoryComboBox.SelectedIndex = -1;
         }
 
-
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            Home home = new Home(_account, _username, _email, _balance, _isGoogleUser); // or pass user info if needed
+            home.Show();
+            this.Close();
+        }
     }
 }

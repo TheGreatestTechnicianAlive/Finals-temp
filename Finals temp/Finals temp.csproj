@@ -138,8 +138,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DataClasses2.dbml</DependentUpon>
     </Compile>
-    <Compile Include="Notifications.xaml.cs">
-      <DependentUpon>Notifications.xaml</DependentUpon>
+    <Compile Include="Transaction.xaml.cs">
+      <DependentUpon>Transaction.xaml</DependentUpon>
     </Compile>
     <Compile Include="SignUp.xaml.cs">
       <DependentUpon>SignUp.xaml</DependentUpon>
@@ -171,7 +171,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Notifications.xaml">
+    <Page Include="Transaction.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

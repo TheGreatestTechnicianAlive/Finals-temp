@@ -9,170 +9,164 @@
         Title="MainWindow" Height="800" Width="450" WindowStartupLocation="CenterScreen"
         Background="#F0F2F5">
 
-    <Grid Margin="20">
-        <!-- Grid Row Definitions -->
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+    <DockPanel Margin="20,20,20,10">
 
-        <!-- Welcome Panel -->
-        <Border Background="#0078D7"
-                CornerRadius="10"
-                Padding="10"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Top"
-                Width="390">
+        <!-- Bottom Navigation -->
+        <Grid DockPanel.Dock="Bottom" Height="50" HorizontalAlignment="Stretch" Background="White" Margin="0,10,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Button Content="📊 Transactions"
+                    Grid.Column="0"
+                    Height="35"
+                    Margin="5,0,5,0"
+                    Background="#0078D7"
+                    Foreground="White"
+                    FontWeight="Bold"
+                    BorderBrush="Transparent"
+                    Cursor="Hand"
+                    Click="TransactionsButton_Click" />
+
+            <Button Content="🏠 Home"
+                    Grid.Column="1"
+                    Height="35"
+                    Margin="5,0,5,0"
+                    Background="#17A2B8"
+                    Foreground="White"
+                    FontWeight="Bold"
+                    BorderBrush="Transparent"
+                    Cursor="Hand"
+                    Click="HomeButton_Click" />
+
+            <Button Content="⚙ Options"
+                    Grid.Column="2"
+                    Height="35"
+                    Margin="5,0,5,0"
+                    Background="#6C757D"
+                    Foreground="White"
+                    FontWeight="Bold"
+                    BorderBrush="Transparent"
+                    Cursor="Hand"
+                    Click="OptionsButton_Click" />
+        </Grid>
+
+        <!-- Main Content -->
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
             <StackPanel>
-                <TextBlock x:Name="WelcomeText"
-                           Text="Welcome!"
-                           Foreground="White"
-                           FontWeight="Bold"
-                           FontSize="14"
-                           TextAlignment="Left" Width="370" />
-            </StackPanel>
-        </Border>
 
-        <!-- Account Summary Section -->
-        <Border Grid.Row="0"
-                Background="White"
-                CornerRadius="10"
-                Padding="15"
-                Margin="0,80,0,20">
-            <StackPanel Orientation="Vertical">
-                <TextBlock Text="ACCOUNT"
-                           FontWeight="Bold"
-                           Foreground="#333"
-                           FontSize="16" />
-
-                <Grid Margin="0,5,0,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-
-                    <TextBlock Text="Allowance"
-                               Foreground="Gray"
-                               FontSize="14"
-                               VerticalAlignment="Center" />
-
-                    <TextBlock x:Name="CashAmountText"
-                               Text="₱0.00"
-                               Grid.Column="1"
-                               Foreground="#0078D7"
-                               FontSize="18"
+                <!-- Welcome Panel -->
+                <Border Background="#0078D7"
+                        CornerRadius="10"
+                        Padding="10"
+                        HorizontalAlignment="Center"
+                        Width="390">
+                    <TextBlock x:Name="WelcomeText"
+                               Text="Welcome!"
+                               Foreground="White"
                                FontWeight="Bold"
-                               VerticalAlignment="Center"
-                               Margin="15,0,0,0" />
-                </Grid>
+                               FontSize="14"
+                               TextAlignment="Left"
+                               Width="370" />
+                </Border>
+
+                <!-- Account Summary -->
+                <Border Background="White"
+                        CornerRadius="10"
+                        Padding="15"
+                        Margin="0,20,0,10">
+                    <StackPanel>
+                        <TextBlock Text="ACCOUNT"
+                                   FontWeight="Bold"
+                                   Foreground="#333"
+                                   FontSize="16" />
+                        <Grid Margin="0,5,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="Allowance"
+                                       Foreground="Gray"
+                                       FontSize="14"
+                                       VerticalAlignment="Center" />
+
+                            <TextBlock x:Name="CashAmountText"
+                                       Text="₱0.00"
+                                       Grid.Column="1"
+                                       Foreground="#0078D7"
+                                       FontSize="18"
+                                       FontWeight="Bold"
+                                       VerticalAlignment="Center"
+                                       Margin="15,0,0,0" />
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Filter + Pie Chart -->
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,5">
+                        <TextBlock Text="Filter:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                        <ComboBox x:Name="DateFilterComboBox"
+                                  Width="150"
+                                  SelectedIndex="0"
+                                  SelectionChanged="DateFilterComboBox_SelectionChanged">
+                            <ComboBoxItem Content="Today" />
+                            <ComboBoxItem Content="This Week" />
+                            <ComboBoxItem Content="This Month" />
+                            <ComboBoxItem Content="This Year" />
+                        </ComboBox>
+                    </StackPanel>
+
+                    <lvc:PieChart
+                        Series="{Binding PieSeries}"
+                        LegendPosition="Right"
+                        Width="400"
+                        Height="300"
+                        Margin="0,0,0,10" />
+                </StackPanel>
+
+                <!-- Action Buttons -->
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Center"
+                            Margin="0,10,0,20">
+                    <Button Content="Add Balance"
+                            Width="130"
+                            Height="40"
+                            Margin="0,0,10,0"
+                            Background="#28A745"
+                            Foreground="White"
+                            FontWeight="Bold"
+                            BorderBrush="Transparent"
+                            Cursor="Hand"
+                            Click="AddCashButton_Click" />
+
+                    <Button Content="Add Expense"
+                            Width="130"
+                            Height="40"
+                            Background="#FFC107"
+                            Foreground="White"
+                            FontWeight="Bold"
+                            BorderBrush="Transparent"
+                            Cursor="Hand"
+                            Click="AddExpense_Click" />
+                </StackPanel>
+
+                <!-- Logout Button -->
+                <Button Content="Logout"
+                        Width="150"
+                        Height="35"
+                        Background="#DC3545"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        BorderBrush="Transparent"
+                        Cursor="Hand"
+                        Click="LogoutButton_Click"
+                        HorizontalAlignment="Center"
+                        Margin="0,0,0,10" />
             </StackPanel>
-        </Border>
-
-        <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Center">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,5">
-                <TextBlock Text="Filter:" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                <ComboBox x:Name="DateFilterComboBox"
-                  Width="150"
-                  SelectedIndex="0"
-                  SelectionChanged="DateFilterComboBox_SelectionChanged">
-                    <ComboBoxItem Content="Today" />
-                    <ComboBoxItem Content="This Week" />
-                    <ComboBoxItem Content="This Month" />
-                    <ComboBoxItem Content="This Year" />
-                </ComboBox>
-            </StackPanel>
-
-            <!-- Pie Chart -->
-            <lvc:PieChart
-        Series="{Binding PieSeries}"
-        LegendPosition="Right"
-        Width="400"
-        Height="300"
-        Margin="0,0,0,10" />
-        </StackPanel>
-
-        <!-- Buttons -->
-        <StackPanel Grid.Row="2"
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Center"
-                    Margin="0,10,0,20">
-            <Button Content="Add Balance"
-                    Width="130"
-                    Height="40"
-                    Margin="0,0,10,0"
-                    Background="#28A745"
-                    Foreground="White"
-                    FontWeight="Bold"
-                    BorderBrush="Transparent"
-                    Cursor="Hand"
-                    Click="AddCashButton_Click" />
-
-            <Button Content="Add Expense"
-                    Width="130"
-                    Height="40"
-                    Background="#FFC107"
-                    Foreground="White"
-                    FontWeight="Bold"
-                    BorderBrush="Transparent"
-                    Cursor="Hand"
-                    Click="AddExpense_Click" />
-        </StackPanel>
-
-        <!-- Logout + Navigation Buttons -->
-        <StackPanel Grid.Row="4"
-            HorizontalAlignment="Center"
-            Margin="0,20,0,0">
-
-            <!-- Logout -->
-            <Button Content="Logout"
-            Width="150"
-            Height="35"
-            Background="#DC3545"
-            Foreground="White"
-            FontWeight="Bold"
-            BorderBrush="Transparent"
-            Cursor="Hand"
-            Click="LogoutButton_Click"
-            Margin="0,0,0,10" />
-
-            <!-- Navigation Buttons -->
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Content="🔔 Notifications"
-                Width="120"
-                Height="35"
-                Margin="0,0,10,0"
-                Background="#0078D7"
-                Foreground="White"
-                FontWeight="Bold"
-                BorderBrush="Transparent"
-                Cursor="Hand"
-                Click="NotificationsButton_Click" />
-
-                <Button Content="🏠 Home"
-                Width="90"
-                Height="35"
-                Margin="0,0,10,0"
-                Background="#17A2B8"
-                Foreground="White"
-                FontWeight="Bold"
-                BorderBrush="Transparent"
-                Cursor="Hand"
-                Click="HomeButton_Click" />
-
-                <Button Content="⚙ Options"
-                Width="100"
-                Height="35"
-                Background="#6C757D"
-                Foreground="White"
-                FontWeight="Bold"
-                BorderBrush="Transparent"
-                Cursor="Hand"
-                Click="OptionsButton_Click" />
-            </StackPanel>
-        </StackPanel>
-
-    </Grid>
+        </ScrollViewer>
+    </DockPanel>
 </Window>
