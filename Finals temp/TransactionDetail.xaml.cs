@@ -16,7 +16,7 @@ namespace Finals_temp
 
         private void Close_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            this.Close(); 
         }
     }
 }
