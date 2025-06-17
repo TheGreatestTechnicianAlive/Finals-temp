@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace Finals_temp
@@ -47,6 +48,7 @@ namespace Finals_temp
                     Background = Brushes.White,
                     CornerRadius = new CornerRadius(10),
                     Padding = new Thickness(10),
+                    Cursor = Cursors.Hand,
                     Effect = new System.Windows.Media.Effects.DropShadowEffect
                     {
                         Color = Colors.Black,
@@ -56,31 +58,41 @@ namespace Finals_temp
                     }
                 };
 
+                // Store these values for the click handler
+                string date = trans.Date.ToString("yyyy-MM-dd");
+                string categoryText = category;
+                decimal amount = trans.Amount;
+                string notes = trans.Notes;
+
+                // Add a MouseDown event for showing details
+                border.MouseLeftButtonUp += (s, e) =>
+                {
+                    var detailWindow = new TransactionDetail(date, categoryText, amount, notes);
+                    detailWindow.ShowDialog();
+                };
+
                 StackPanel item = new StackPanel();
                 item.Children.Add(new TextBlock
                 {
-                    Text = $"Date: {trans.Date:yyyy-MM-dd}",
+                    Text = $"Date: {date}",
                     FontWeight = FontWeights.Bold,
                     Foreground = Brushes.Black
                 });
-
                 item.Children.Add(new TextBlock
                 {
-                    Text = $"Category: {category}",
+                    Text = $"Category: {categoryText}",
                     Foreground = Brushes.Gray
                 });
-
                 item.Children.Add(new TextBlock
                 {
-                    Text = $"Amount: ₱{trans.Amount:N2}",
+                    Text = $"Amount: ₱{amount:N2}",
                     Foreground = Brushes.Black
                 });
-
-                if (!string.IsNullOrWhiteSpace(trans.Notes))
+                if (!string.IsNullOrWhiteSpace(notes))
                 {
                     item.Children.Add(new TextBlock
                     {
-                        Text = $"Notes: {trans.Notes}",
+                        Text = $"Notes: {notes}",
                         Foreground = Brushes.Gray
                     });
                 }

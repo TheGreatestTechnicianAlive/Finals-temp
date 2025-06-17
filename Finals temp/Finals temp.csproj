@@ -138,11 +138,17 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DataClasses2.dbml</DependentUpon>
     </Compile>
+    <Compile Include="Options.xaml.cs">
+      <DependentUpon>Options.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Transaction.xaml.cs">
       <DependentUpon>Transaction.xaml</DependentUpon>
     </Compile>
     <Compile Include="SignUp.xaml.cs">
       <DependentUpon>SignUp.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TransactionDetail.xaml.cs">
+      <DependentUpon>TransactionDetail.xaml</DependentUpon>
     </Compile>
     <Page Include="AddBalance.xaml">
       <SubType>Designer</SubType>
@@ -171,11 +177,19 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Options.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Transaction.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SignUp.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TransactionDetail.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
