@@ -1,27 +1,56 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
+using System.Security.Principal;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Finals_temp
 {
-    /// <summary>
-    /// Interaction logic for Options.xaml
-    /// </summary>
     public partial class Options : Window
     {
-        public Options()
+        private string _account;
+        private string _username;
+        private string _email;
+        private decimal _balance;
+        private bool _isGoogleUser;
+
+        public Options(string account, string username, string email, decimal balance, bool isGoogleUser)
         {
             InitializeComponent();
+            _account = account;
+            _username = username;
+            _email = email;
+            _balance = balance;
+            _isGoogleUser = isGoogleUser;
+        }
+
+        private void LogoutButton_Click(object sender, RoutedEventArgs e)
+        {
+            var tokenPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "GoogleLoginDemoTokens");
+
+            if (_isGoogleUser && Directory.Exists(tokenPath))
+                Directory.Delete(tokenPath, true);
+
+            MessageBox.Show("Logged out successfully!");
+            new MainWindow().Show();
+            this.Close();
+        }
+
+        private void ChangeUsername_Click(object sender, MouseButtonEventArgs e)
+        {
+            new ChangeUsername(_account, _username, _email, _balance, _isGoogleUser).Show();
+        }
+
+        private void ChangePassword_Click(object sender, MouseButtonEventArgs e)
+        {
+            new ChangePassword(_account, _username, _email, _balance, _isGoogleUser).Show();
+        }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            var home = new Home(_account, _username, _email, _balance, _isGoogleUser);
+            home.Show();
+            this.Close();
         }
     }
 }

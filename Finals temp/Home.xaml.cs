@@ -130,18 +130,21 @@ namespace Finals_temp
 
         private void HomeButton_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Home clicked.");
+
         }
 
         private void OptionsButton_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Options clicked.");
+            Options optionsWindow = new Options(_Account, _username, _email, _cashAmount, google);
+            optionsWindow.Show();
+            this.Close(); // Or this.Hide(); to keep it in memory
         }
+
 
         private void TransactionsButton_Click(object sender, RoutedEventArgs e)
         {
-            var transactionWindow = new Transaction(_Account, _username, _email, _cashAmount, google);
-            transactionWindow.ShowDialog();
+            Transaction transactionWindow = new Transaction(_Account, _username, _email, _cashAmount, google);
+            transactionWindow.Show();
             this.Close();
         }
 

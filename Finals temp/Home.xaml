@@ -154,18 +154,7 @@
                             Click="AddExpense_Click" />
                 </StackPanel>
 
-                <!-- Logout Button -->
-                <Button Content="Logout"
-                        Width="150"
-                        Height="35"
-                        Background="#DC3545"
-                        Foreground="White"
-                        FontWeight="Bold"
-                        BorderBrush="Transparent"
-                        Cursor="Hand"
-                        Click="LogoutButton_Click"
-                        HorizontalAlignment="Center"
-                        Margin="0,0,0,10" />
+               
             </StackPanel>
         </ScrollViewer>
     </DockPanel>
