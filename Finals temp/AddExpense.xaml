@@ -122,7 +122,7 @@
                           Cursor="Hand">
                     <ComboBoxItem Content="🍽 Food"/>
                     <ComboBoxItem Content="💡 Utilities"/>
-                    <ComboBoxItem Content="🚗 Transportation"/>
+                    <ComboBoxItem Content="🚌 Transportation"/>
                     <ComboBoxItem Content="📦 Others"/>
                 </ComboBox>
             </StackPanel>

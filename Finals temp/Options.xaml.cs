@@ -3,6 +3,7 @@ using System.IO;
 using System.Security.Principal;
 using System.Windows;
 using System.Windows.Input;
+using System.Xml.Linq;
 
 namespace Finals_temp
 {
@@ -22,6 +23,9 @@ namespace Finals_temp
             _email = email;
             _balance = balance;
             _isGoogleUser = isGoogleUser;
+
+            WelcomeText.Text = $"Username {username}!\nEmail: {email}";
+
         }
 
         private void LogoutButton_Click(object sender, RoutedEventArgs e)

@@ -36,11 +36,13 @@ namespace Finals_temp
 
             _cashAmount = balance;
 
-            WelcomeText.Text = $"Welcome {name}!\nEmail: {email}";
             UpdateCashAmountDisplay();
 
             _viewModel = new HomeViewModel(_Account);
             DataContext = _viewModel;
+
+            UpdateCategoryBreakdownUI();
+
         }
 
 
@@ -53,6 +55,7 @@ namespace Finals_temp
             {
                 RefreshBalanceFromDatabase();
             }
+            UpdateCategoryBreakdownUI();
         }
 
         private void AddExpense_Click(object sender, RoutedEventArgs e)
@@ -90,8 +93,122 @@ namespace Finals_temp
                 RefreshBalanceFromDatabase();
 
                 _viewModel.RefreshPieChart(_viewModel.CurrentFilter);
+                UpdateCategoryBreakdownUI();
             }
         }
+
+        //private void ToggleChartButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    if (ExpensePieChart.Visibility == Visibility.Visible)
+        //    {
+        //        ExpensePieChart.Visibility = Visibility.Collapsed;
+        //        ToggleChartButton.Content = "Show Chart";
+        //    }
+        //    else
+        //    {
+        //        ExpensePieChart.Visibility = Visibility.Visible;
+        //        ToggleChartButton.Content = "Hide Chart";
+        //    }
+        //}
+
+        private void UpdateCategoryBreakdownUI()
+        {
+            CategoryBreakdownPanel.Children.Clear();
+
+            foreach (var item in _viewModel.CategoryBreakdown)
+            {
+                var container = new StackPanel
+                {
+                    Margin = new Thickness(10, 8, 10, 8),
+                };
+
+                var grid = new Grid();
+                grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(50) }); // Icon
+                grid.ColumnDefinitions.Add(new ColumnDefinition()); // Category name
+                grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto }); // Amount
+
+                // Icon container
+                var iconBorder = new Border
+                {
+                    Width = 40,
+                    Height = 40,
+                    CornerRadius = new CornerRadius(20),
+                    Background = new SolidColorBrush(Color.FromArgb(30, ((SolidColorBrush)item.BarColor).Color.R, ((SolidColorBrush)item.BarColor).Color.G, ((SolidColorBrush)item.BarColor).Color.B)),
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    Child = new TextBlock
+                    {
+                        Text = item.Icon,
+                        FontSize = 18,
+                        HorizontalAlignment = HorizontalAlignment.Center,
+                        VerticalAlignment = VerticalAlignment.Center,
+                        Margin = new Thickness(0),
+                    }
+                };
+                grid.Children.Add(iconBorder);
+                Grid.SetColumn(iconBorder, 0);
+
+                // Category + percentage
+                var textStack = new StackPanel
+                {
+                    Orientation = Orientation.Horizontal,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    Margin = new Thickness(5, 0, 0, 0)
+                };
+
+                textStack.Children.Add(new TextBlock
+                {
+                    Text = item.CategoryName,
+                    FontSize = 14,
+                    FontWeight = FontWeights.SemiBold,
+                    Foreground = Brushes.Black,
+                    VerticalAlignment = VerticalAlignment.Center
+                });
+
+                textStack.Children.Add(new TextBlock
+                {
+                    Text = $"   {item.Percentage}%",
+                    FontSize = 13,
+                    Foreground = Brushes.Gray,
+                    VerticalAlignment = VerticalAlignment.Center
+                });
+
+                grid.Children.Add(textStack);
+                Grid.SetColumn(textStack, 1);
+
+                // Amount
+                var amountText = new TextBlock
+                {
+                    Text = $"₱{item.Amount:N2}",
+                    FontSize = 14,
+                    FontWeight = FontWeights.SemiBold,
+                    Foreground = Brushes.Black,
+                    VerticalAlignment = VerticalAlignment.Center
+                };
+
+                grid.Children.Add(amountText);
+                Grid.SetColumn(amountText, 2);
+
+                // Progress bar
+                var progressBar = new ProgressBar
+                {
+                    Value = item.Percentage,
+                    Maximum = 100,
+                    Height = 6,
+                    Margin = new Thickness(0, 8, 0, 0),
+                    Foreground = item.BarColor,
+                    Background = new SolidColorBrush(Color.FromRgb(230, 230, 230)),
+                };
+
+                container.Children.Add(grid);
+                container.Children.Add(progressBar);
+
+                CategoryBreakdownPanel.Children.Add(container);
+            }
+        }
+
+
+
 
         private void UpdateCashAmountDisplay()
         {
@@ -115,18 +232,6 @@ namespace Finals_temp
                 UpdateCashAmountDisplay();
             }
         }
-
-        private void LogoutButton_Click(object sender, RoutedEventArgs e)
-        {
-            var tokenPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "GoogleLoginDemoTokens");
-
-            if (google)
-                Directory.Delete(tokenPath, true);
-
-            MessageBox.Show("Logged out successfully!");
-            new MainWindow().Show();
-            this.Close();
-        } 
 
         private void HomeButton_Click(object sender, RoutedEventArgs e)
         {
@@ -157,9 +262,13 @@ namespace Finals_temp
                 if (_viewModel != null)
                 {
                     _viewModel.ApplyDateFilter(selectedFilter);
+
+                    // ⬇️ Call UI refresh after updating ViewModel
+                    UpdateCategoryBreakdownUI();
                 }
             }
         }
+
     }
 
     public class HomeViewModel : INotifyPropertyChanged
@@ -176,6 +285,17 @@ namespace Finals_temp
                 OnPropertyChanged(nameof(PieSeries));
             }
         }
+        private ObservableCollection<CategoryBreakdownItem> _categoryBreakdown;
+        public ObservableCollection<CategoryBreakdownItem> CategoryBreakdown
+        {
+            get => _categoryBreakdown;
+            set
+            {
+                _categoryBreakdown = value;
+                OnPropertyChanged(nameof(CategoryBreakdown));
+            }
+        }
+
 
         public string CurrentFilter { get; private set; } = "Today";
         private readonly string _account;
@@ -258,6 +378,7 @@ namespace Finals_temp
                 if (TotalAmount == 0 || !expenses.Any())
                 {
                     PieSeries = new ObservableCollection<ISeries>
+
             {
                 new PieSeries<double>
                 {
@@ -288,10 +409,38 @@ namespace Finals_temp
                         })
                     );
                 }
+                var breakdownItems = new ObservableCollection<CategoryBreakdownItem>();
+
+                foreach (var e in expenses)
+                {
+                    string categoryName = categoryNames.ContainsKey(e.Category) ? categoryNames[e.Category] : "Unknown";
+                    double percentage = TotalAmount > 0 ? Math.Round((double)(e.TotalAmount / TotalAmount * 100), 2) : 0;
+                    SKColor skColor = categoryColors.ContainsKey(e.Category) ? categoryColors[e.Category] : SKColors.Gray;
+
+                    breakdownItems.Add(new CategoryBreakdownItem
+                    {
+                        CategoryName = categoryName,
+                        Icon = GetIconForCategory(e.Category),
+                        Amount = e.TotalAmount,
+                        Percentage = percentage,
+                        BarColor = new SolidColorBrush(Color.FromRgb(skColor.Red, skColor.Green, skColor.Blue))
+                    });
+                }
+
+                CategoryBreakdown = breakdownItems;
 
                 OnPropertyChanged(nameof(TotalAmount));
             }
         }
+        private string GetIconForCategory(string categoryId)
+        {
+            if (categoryId == "C02") return "💡"; // Utilities
+            if (categoryId == "C03") return "🚌"; // Transport
+            if (categoryId == "C04") return "🍽"; // Food
+            if (categoryId == "C05") return "📦"; // Other
+            return "❓";
+        }
+
 
 
         private void OnPropertyChanged(string name)
@@ -299,4 +448,14 @@ namespace Finals_temp
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
+
+    public class CategoryBreakdownItem
+    {
+        public string CategoryName { get; set; }
+        public string Icon { get; set; }  // Emoji or icon text
+        public decimal Amount { get; set; }
+        public double Percentage { get; set; }
+        public Brush BarColor { get; set; }
+    }
+
 }

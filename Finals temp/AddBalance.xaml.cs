@@ -148,8 +148,6 @@ namespace Finals_temp
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            Home home = new Home(_account, _username, _email, _balance, _isGoogleUser); // or pass user info if needed
-            home.Show();
             this.Close();
         }
     }

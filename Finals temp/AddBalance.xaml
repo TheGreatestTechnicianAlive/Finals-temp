@@ -101,7 +101,7 @@
             <!-- Save Button -->
             <Button Content="Save Balance"
                     Style="{StaticResource RoundedButtonStyle}"
-                    Click="SaveBalance_Click"/>
+                    Click="SaveBalance_Click" Height="49"/>
         </StackPanel>
     </Grid>
 </Window>

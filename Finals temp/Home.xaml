@@ -44,13 +44,13 @@
             <Button Content="⚙ Options"
                     Grid.Column="2"
                     Height="35"
-                    Margin="5,0,5,0"
+                    Margin="5,8,5,0"
                     Background="#6C757D"
                     Foreground="White"
                     FontWeight="Bold"
                     BorderBrush="Transparent"
                     Cursor="Hand"
-                    Click="OptionsButton_Click" />
+                    Click="OptionsButton_Click" VerticalAlignment="Top" />
         </Grid>
 
         <!-- Main Content -->
@@ -58,19 +58,21 @@
             <StackPanel>
 
                 <!-- Welcome Panel -->
-                <Border Background="#0078D7"
-                        CornerRadius="10"
-                        Padding="10"
-                        HorizontalAlignment="Center"
-                        Width="390">
-                    <TextBlock x:Name="WelcomeText"
-                               Text="Welcome!"
-                               Foreground="White"
-                               FontWeight="Bold"
-                               FontSize="14"
-                               TextAlignment="Left"
-                               Width="370" />
+                <Border Background="#E0F0FF"
+        CornerRadius="12"
+        Padding="10"
+        HorizontalAlignment="Center"
+        Margin="0,0,0,5"
+        Width="390">
+                    <StackPanel>
+                        <TextBlock Text="👋 Hello!"
+                   FontSize="22"
+                   FontWeight="Bold"
+                   Foreground="#007ACC"
+                   Margin="0,0,0,0"/>
+                    </StackPanel>
                 </Border>
+
 
                 <!-- Account Summary -->
                 <Border Background="White"
@@ -105,14 +107,18 @@
                     </StackPanel>
                 </Border>
 
-                <!-- Filter + Pie Chart -->
-                <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,5">
-                        <TextBlock Text="Filter:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                <!-- Filter + Tabs for Chart / Category View -->
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="0,10,0,10">
+
+                    <!-- Filter Selection -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,0">
+                        <TextBlock Text="Filter by:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+
                         <ComboBox x:Name="DateFilterComboBox"
-                                  Width="150"
-                                  SelectedIndex="0"
-                                  SelectionChanged="DateFilterComboBox_SelectionChanged">
+                  Width="150"
+                  SelectedIndex="0"
+                  SelectionChanged="DateFilterComboBox_SelectionChanged"
+                  Margin="0,0,10,0">
                             <ComboBoxItem Content="Today" />
                             <ComboBoxItem Content="This Week" />
                             <ComboBoxItem Content="This Month" />
@@ -120,13 +126,29 @@
                         </ComboBox>
                     </StackPanel>
 
-                    <lvc:PieChart
-                        Series="{Binding PieSeries}"
-                        LegendPosition="Right"
-                        Width="400"
-                        Height="300"
-                        Margin="0,0,0,10" />
+                    <!-- Tabs for Pie Chart and Category Breakdown -->
+                    <TabControl Width="400" Height="350" Background="White" BorderThickness="0" Padding="5">
+                        <!-- Pie Chart Tab -->
+                        <TabItem Header="Basic">
+                            <Border Background="#F9F9F9" Padding="10">
+                                <lvc:PieChart x:Name="ExpensePieChart"
+                              Series="{Binding PieSeries}"
+                              LegendPosition="Right"
+                              Width="350"
+                              Height="300"/>
+                            </Border>
+                        </TabItem>
+
+                        <!-- Category Breakdown Tab -->
+                        <TabItem Header="Summary">
+                            <ScrollViewer VerticalScrollBarVisibility="Auto" Background="#F9F9F9">
+                                <StackPanel x:Name="CategoryBreakdownPanel" Margin="5" />
+                            </ScrollViewer>
+                        </TabItem>
+                    </TabControl>
                 </StackPanel>
+
+
 
                 <!-- Action Buttons -->
                 <StackPanel Orientation="Horizontal"
@@ -154,7 +176,7 @@
                             Click="AddExpense_Click" />
                 </StackPanel>
 
-               
+
             </StackPanel>
         </ScrollViewer>
     </DockPanel>

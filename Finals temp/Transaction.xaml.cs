@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Security.Principal;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -124,7 +125,9 @@ namespace Finals_temp
 
         private void OptionsButton_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Options page is under construction.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+            Options optionsWindow = new Options(_account, _username, _email, _balance, _isGoogleUser);
+            optionsWindow.Show();
+            this.Close();
         }
 
     }
