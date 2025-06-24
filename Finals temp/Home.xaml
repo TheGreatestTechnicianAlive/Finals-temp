@@ -6,13 +6,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Finals_temp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="800" Width="450" WindowStartupLocation="CenterScreen"
-        Background="#F0F2F5">
+        Title="Home" Height="800" Width="450" WindowStartupLocation="CenterScreen"
+        WindowStyle="SingleBorderWindow" ResizeMode="NoResize">
+
+    <!-- Full-screen Gradient Background -->
+    <Window.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#E0FFFF" Offset="0" />
+            <GradientStop Color="#CCF5F0" Offset="1" />
+        </LinearGradientBrush>
+    </Window.Background>
 
     <DockPanel Margin="20,20,20,10">
 
         <!-- Bottom Navigation -->
-        <Grid DockPanel.Dock="Bottom" Height="50" HorizontalAlignment="Stretch" Background="White" Margin="0,10,0,0">
+        <Grid DockPanel.Dock="Bottom" Height="55" Background="Transparent" Margin="0,10,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
@@ -21,9 +29,9 @@
 
             <Button Content="📊 Transactions"
                     Grid.Column="0"
-                    Height="35"
+                    Height="40"
                     Margin="5,0,5,0"
-                    Background="#0078D7"
+                    Background="#0097B2"
                     Foreground="White"
                     FontWeight="Bold"
                     BorderBrush="Transparent"
@@ -32,10 +40,10 @@
 
             <Button Content="🏠 Home"
                     Grid.Column="1"
-                    Height="35"
+                    Height="40"
                     Margin="5,0,5,0"
-                    Background="#17A2B8"
-                    Foreground="White"
+                    Background="#00F5D4"
+                    Foreground="#1A1F71"
                     FontWeight="Bold"
                     BorderBrush="Transparent"
                     Cursor="Hand"
@@ -43,46 +51,44 @@
 
             <Button Content="⚙ Options"
                     Grid.Column="2"
-                    Height="35"
-                    Margin="5,8,5,0"
-                    Background="#6C757D"
+                    Height="40"
+                    Margin="5,0,5,0"
+                    Background="#1A1F71"
                     Foreground="White"
                     FontWeight="Bold"
                     BorderBrush="Transparent"
                     Cursor="Hand"
-                    Click="OptionsButton_Click" VerticalAlignment="Top" />
+                    Click="OptionsButton_Click" />
         </Grid>
 
         <!-- Main Content -->
         <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <StackPanel>
+            <StackPanel Background="Transparent">
 
                 <!-- Welcome Panel -->
-                <Border Background="#E0F0FF"
-        CornerRadius="12"
-        Padding="10"
-        HorizontalAlignment="Center"
-        Margin="0,0,0,5"
-        Width="390">
-                    <StackPanel>
-                        <TextBlock Text="👋 Hello!"
-                   FontSize="22"
-                   FontWeight="Bold"
-                   Foreground="#007ACC"
-                   Margin="0,0,0,0"/>
-                    </StackPanel>
+                <Border Background="#00F5D4"
+                        CornerRadius="12"
+                        Padding="10"
+                        HorizontalAlignment="Center"
+                        Margin="0,0,0,10"
+                        Width="390">
+                    <TextBlock Text="👋 Hello!"
+                               FontSize="22"
+                               FontWeight="Bold"
+                               Foreground="#1A1F71"/>
                 </Border>
 
-
                 <!-- Account Summary -->
-                <Border Background="White"
+                <Border Background="#F9FFFF"
                         CornerRadius="10"
                         Padding="15"
-                        Margin="0,20,0,10">
+                        Margin="0,0,0,10"
+                        BorderBrush="#00F5D4"
+                        BorderThickness="2">
                     <StackPanel>
                         <TextBlock Text="ACCOUNT"
                                    FontWeight="Bold"
-                                   Foreground="#333"
+                                   Foreground="#1A1F71"
                                    FontSize="16" />
                         <Grid Margin="0,5,0,0">
                             <Grid.ColumnDefinitions>
@@ -98,7 +104,7 @@
                             <TextBlock x:Name="CashAmountText"
                                        Text="₱0.00"
                                        Grid.Column="1"
-                                       Foreground="#0078D7"
+                                       Foreground="#0097B2"
                                        FontSize="18"
                                        FontWeight="Bold"
                                        VerticalAlignment="Center"
@@ -107,18 +113,17 @@
                     </StackPanel>
                 </Border>
 
-                <!-- Filter + Tabs for Chart / Category View -->
+                <!-- Filter + Tabs -->
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="0,10,0,10">
 
-                    <!-- Filter Selection -->
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,0">
-                        <TextBlock Text="Filter by:" VerticalAlignment="Center" Margin="0,0,5,0"/>
-
+                    <!-- Filter -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,10,10">
+                        <TextBlock Text="Filter by:" VerticalAlignment="Center" Margin="0,0,5,0" Foreground="#1A1F71" FontWeight="Bold"/>
                         <ComboBox x:Name="DateFilterComboBox"
-                  Width="150"
-                  SelectedIndex="0"
-                  SelectionChanged="DateFilterComboBox_SelectionChanged"
-                  Margin="0,0,10,0">
+                                  Width="150"
+                                  SelectedIndex="0"
+                                  SelectionChanged="DateFilterComboBox_SelectionChanged"
+                                  Background="White">
                             <ComboBoxItem Content="Today" />
                             <ComboBoxItem Content="This Week" />
                             <ComboBoxItem Content="This Month" />
@@ -126,29 +131,27 @@
                         </ComboBox>
                     </StackPanel>
 
-                    <!-- Tabs for Pie Chart and Category Breakdown -->
-                    <TabControl Width="400" Height="350" Background="White" BorderThickness="0" Padding="5">
+                    <!-- Tabs -->
+                    <TabControl Width="400" Height="350" Background="Transparent" BorderThickness="0" Padding="5">
                         <!-- Pie Chart Tab -->
-                        <TabItem Header="Basic">
-                            <Border Background="#F9F9F9" Padding="10">
+                        <TabItem Header="Chart">
+                            <Border Background="#E5FFFB" Padding="10" CornerRadius="8">
                                 <lvc:PieChart x:Name="ExpensePieChart"
-                              Series="{Binding PieSeries}"
-                              LegendPosition="Right"
-                              Width="350"
-                              Height="300"/>
+                                              Series="{Binding PieSeries}"
+                                              LegendPosition="Right"
+                                              Width="350"
+                                              Height="300"/>
                             </Border>
                         </TabItem>
 
-                        <!-- Category Breakdown Tab -->
+                        <!-- Summary Tab -->
                         <TabItem Header="Summary">
-                            <ScrollViewer VerticalScrollBarVisibility="Auto" Background="#F9F9F9">
-                                <StackPanel x:Name="CategoryBreakdownPanel" Margin="5" />
+                            <ScrollViewer VerticalScrollBarVisibility="Auto" Background="#E5FFFB">
+                                <StackPanel x:Name="CategoryBreakdownPanel" Margin="5"/>
                             </ScrollViewer>
                         </TabItem>
                     </TabControl>
                 </StackPanel>
-
-
 
                 <!-- Action Buttons -->
                 <StackPanel Orientation="Horizontal"
@@ -156,7 +159,7 @@
                             Margin="0,10,0,20">
                     <Button Content="Add Balance"
                             Width="130"
-                            Height="40"
+                            Height="45"
                             Margin="0,0,10,0"
                             Background="#28A745"
                             Foreground="White"
@@ -167,7 +170,7 @@
 
                     <Button Content="Add Expense"
                             Width="130"
-                            Height="40"
+                            Height="45"
                             Background="#FFC107"
                             Foreground="White"
                             FontWeight="Bold"
@@ -175,7 +178,6 @@
                             Cursor="Hand"
                             Click="AddExpense_Click" />
                 </StackPanel>
-
 
             </StackPanel>
         </ScrollViewer>

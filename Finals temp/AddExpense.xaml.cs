@@ -50,7 +50,8 @@ namespace Finals_temp
                 switch (content)
                 {
                     case "C":
-                        AmountDisplay = "₱0.00";
+                        _inputBuilder.Clear();
+                        AmountText.Text = "₱0.00";
                         return;
 
                     case "⌫":
@@ -61,36 +62,58 @@ namespace Finals_temp
                     case "=":
                         try
                         {
-                            var result = new DataTable().Compute(_inputBuilder.ToString(), null);
-                            _inputBuilder.Clear();
-                            _inputBuilder.Append(Convert.ToDecimal(result).ToString("F2"));
+                            string expression = _inputBuilder.ToString();
+
+                            // Only allow valid characters
+                            if (System.Text.RegularExpressions.Regex.IsMatch(expression, @"^[0-9\.\+\-\*/]+$"))
+                            {
+                                var result = new DataTable().Compute(expression, null);
+                                decimal final = Convert.ToDecimal(result);
+                                _inputBuilder.Clear();
+                                _inputBuilder.Append(final.ToString("F2"));
+                            }
                         }
                         catch
                         {
                             _inputBuilder.Clear();
-                            _inputBuilder.Append("Error");
+                            AmountText.Text = "Error";
+                            return;
                         }
                         break;
 
                     default:
-                        _inputBuilder.Append(content);
+                        // Accept only digits and allowed math symbols
+                        if ("0123456789.+-*/".Contains(content))
+                        {
+                            _inputBuilder.Append(content);
+                        }
                         break;
                 }
 
-                if (_inputBuilder.ToString() == "Error")
-                {
-                    AmountText.Text = "Error";
-                }
-                else if (decimal.TryParse(_inputBuilder.ToString(), out decimal val))
-                {
-                    AmountText.Text = "₱" + val.ToString("N2"); // Thousands separator + 2 decimals
-                }
-                else
+                if (_inputBuilder.Length == 0)
                 {
                     AmountText.Text = "₱0.00";
                 }
+                else if (_inputBuilder.ToString() == "Error")
+                {
+                    AmountText.Text = "Error";
+                }
+                else
+                {
+                    // Try format as currency
+                    if (decimal.TryParse(_inputBuilder.ToString(), out decimal val))
+                    {
+                        AmountText.Text = "₱" + val.ToString("N2");
+                    }
+                    else
+                    {
+                        // Still building expression, show as is
+                        AmountText.Text = "₱" + _inputBuilder.ToString();
+                    }
+                }
             }
         }
+
 
         private void SaveExpense_Click(object sender, RoutedEventArgs e)
         {
@@ -103,14 +126,15 @@ namespace Finals_temp
             string categoryName = selectedItem?.Content.ToString() ?? "Other";
 
             string categoryID;
-            if (categoryName == "💡 Utilities")
+            if (categoryName.Contains("Utilities"))
                 categoryID = "C02";
-            else if (categoryName == "🚗 Transportation")
+            else if (categoryName.Contains("Transportation"))
                 categoryID = "C03";
-            else if (categoryName == "🍽 Food")
+            else if (categoryName.Contains("Food"))
                 categoryID = "C04";
             else
                 categoryID = "C05";
+
 
 
             if (decimal.TryParse(amountStr, out decimal amountDecimal))
@@ -158,8 +182,10 @@ namespace Finals_temp
                     db.SubmitChanges();
 
                     // Confirmation
-                    MessageBox.Show($"Saved:\nID: {newId}\nCategory: {categoryName} ({categoryID})\nAmount: ₱{amountDecimal:N2}\nNotes: {notes}",
-                                    "Expense Saved", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show(
+    $"Saved:\nID: {newId}\nCategory: {categoryName}\nDate: {DateTime.Today:MMMM dd, yyyy}\nAmount: ₱{amountDecimal:N2}\nNotes: {notes}",
+    "Expense Saved", MessageBoxButton.OK, MessageBoxImage.Information);
+
                 }
                 catch (Exception ex)
                 {

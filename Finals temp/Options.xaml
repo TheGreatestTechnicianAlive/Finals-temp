@@ -4,9 +4,30 @@
         Title="Options"
         Height="800"
         Width="450"
-        Background="#F0F2F5"
+        Background="#F3F5F9"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize">
+
+    <Window.Resources>
+        <Style x:Key="RoundedButtonStyle" TargetType="Button">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#0097B2"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
 
     <Grid Margin="20">
         <Grid.RowDefinitions>
@@ -15,67 +36,66 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- Header with Back Button and Title -->
+        <!-- Header -->
         <Grid Grid.Row="0" Margin="0,0,0,10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- Back Button -->
             <Button Content="← Back"
                     Click="BackButton_Click"
-                    HorizontalAlignment="Left"
-                    Margin="0,10,0,5"
                     Width="80"
-                    Height="30"
-                    Background="#D3D3D3"
-                    Foreground="Black"
+                    Height="35"
                     FontWeight="Bold"
+                    Cursor="Hand"
+                    Margin="0,10,0,5"
+                    Background="#BDC3C7"
+                    Foreground="Black"
                     BorderThickness="0"
-                    Cursor="Hand"/>
+                    HorizontalAlignment="Left"/>
 
-            <!-- Title -->
             <TextBlock Grid.Column="1"
                        Text="Settings"
-                       FontSize="28"
+                       FontSize="26"
                        FontWeight="Bold"
-                       VerticalAlignment="Center"
                        HorizontalAlignment="Center"
-                       Margin="0,0,30,0"/>
+                       VerticalAlignment="Center"
+                       Margin="0,0,30,0"
+                       Foreground="#1A1F71"/>
         </Grid>
 
         <!-- Main Content -->
         <StackPanel Grid.Row="1" Margin="0,10,0,20" VerticalAlignment="Top" HorizontalAlignment="Center" Width="400">
 
             <!-- Welcome Banner -->
-            <Border Background="#0078D7" CornerRadius="10" Padding="10" Margin="0,0,0,20">
+            <Border Background="#00F5D4" CornerRadius="12" Padding="12" Margin="0,0,0,20">
                 <TextBlock x:Name="WelcomeText"
                            Text="Welcome!"
-                           Foreground="White"
+                           Foreground="#1A1F71"
                            FontWeight="Bold"
-                           FontSize="14"
-                           TextAlignment="Left"/>
+                           FontSize="16"/>
             </Border>
 
             <!-- Account Section -->
-            <Border Background="White" CornerRadius="10" Padding="20" Margin="0,0,0,20">
+            <Border Background="White" CornerRadius="12" Padding="20" Margin="0,0,0,20" BorderBrush="#DDD" BorderThickness="1">
                 <StackPanel>
                     <TextBlock Text="Account"
                                FontSize="20"
                                FontWeight="Bold"
-                               Margin="0,0,0,15"/>
+                               Margin="0,0,0,15"
+                               Foreground="#0097B2"/>
 
                     <TextBlock Text="Change Username"
                                FontSize="16"
-                               Foreground="#007ACC"
+                               Foreground="#0097B2"
                                Cursor="Hand"
                                MouseLeftButtonUp="ChangeUsername_Click"
                                Margin="10,5"/>
 
                     <TextBlock Text="Change Password"
                                FontSize="16"
-                               Foreground="#007ACC"
+                               Foreground="#0097B2"
                                Cursor="Hand"
                                MouseLeftButtonUp="ChangePassword_Click"
                                Margin="10,5"/>
@@ -83,16 +103,20 @@
             </Border>
 
             <!-- About Section -->
-            <Border Background="White" CornerRadius="10" Padding="20" Margin="0,0,0,20">
+            <Border Background="White" CornerRadius="12" Padding="20" Margin="0,0,0,20" BorderBrush="#DDD" BorderThickness="1">
                 <StackPanel>
                     <TextBlock Text="About &amp; Support"
                                FontSize="20"
                                FontWeight="Bold"
+                               Foreground="#0097B2"
                                Margin="0,0,0,15"/>
+
                     <TextBlock Text="This app helps you manage expenses and balance."
                                TextWrapping="Wrap"
                                FontSize="14"
+                               Foreground="#333"
                                Margin="0,0,0,10"/>
+
                     <TextBlock Text="Contact: support@yourapp.com"
                                FontSize="14"
                                Foreground="Gray"/>
@@ -100,15 +124,17 @@
             </Border>
 
             <!-- Version Section -->
-            <Border Background="White" CornerRadius="10" Padding="20">
+            <Border Background="White" CornerRadius="12" Padding="20" BorderBrush="#DDD" BorderThickness="1">
                 <StackPanel>
                     <TextBlock Text="App Version"
                                FontSize="20"
                                FontWeight="Bold"
+                               Foreground="#0097B2"
                                Margin="0,0,0,15"/>
                     <TextBlock Text="v1.0.0"
                                FontSize="16"
-                               FontStyle="Italic"/>
+                               FontStyle="Italic"
+                               Foreground="#666"/>
                 </StackPanel>
             </Border>
         </StackPanel>
@@ -117,13 +143,11 @@
         <Button Grid.Row="2"
                 Content="Logout"
                 Click="LogoutButton_Click"
-                Background="#FF5252"
-                Foreground="White"
-                FontWeight="Bold"
                 FontSize="18"
-                Height="50"
-                BorderThickness="0"
+                Style="{StaticResource RoundedButtonStyle}"
+                Background="#FF5252"
                 Margin="0,10,0,0"
-                HorizontalAlignment="Stretch"/>
+                HorizontalAlignment="Stretch"
+                Height="50"/>
     </Grid>
 </Window>

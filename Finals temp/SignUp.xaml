@@ -5,64 +5,93 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Finals_temp"
         mc:Ignorable="d"
-        Title="Sign Up" Height="420" Width="400" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="Sign Up" Height="650" Width="450" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
 
-    <Grid Background="#f0f2f5">
-        <Border Width="350" Padding="20" CornerRadius="10" Background="White" 
-                VerticalAlignment="Center" HorizontalAlignment="Center" 
-                BorderBrush="#ccc" BorderThickness="1">
+    <Grid>
+        <!-- Background Gradient -->
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                <GradientStop Color="#E0FFFF" Offset="0"/>
+                <GradientStop Color="#CCF5F0" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <Border Width="350" Padding="25" CornerRadius="10" Background="White"
+                VerticalAlignment="Center" HorizontalAlignment="Center"
+                BorderBrush="#00F5D4" BorderThickness="2">
+
             <StackPanel>
+
+                <!-- Title -->
                 <TextBlock Text="Create an Account" 
                            FontSize="24" 
                            FontWeight="Bold" 
-                           Foreground="#333" 
+                           Foreground="#1A1F71" 
                            HorizontalAlignment="Center" 
-                           Margin="0,0,0,20"/>
+                           Margin="0,0,0,25"/>
 
-                <TextBlock Text="Username" Margin="0,0,0,5" Foreground="#666"/>
-                <TextBox Name="UsernameTextBox" Height="30" Margin="0,0,0,15"/>
+                <!-- Username -->
+                <TextBlock Text="Username" Margin="0,0,0,5" Foreground="#1A1F71" FontWeight="Bold"/>
+                <Border CornerRadius="8" BorderBrush="#0097B2" BorderThickness="2" Background="White" Margin="0,0,0,15">
+                    <TextBox Name="UsernameTextBox" Height="40" FontSize="14" Padding="10"
+                             Background="Transparent" BorderThickness="0"/>
+                </Border>
 
-                <TextBlock Text="Email" Margin="0,0,0,5" Foreground="#666"/>
-                <TextBox Name="EmailTextBox" Height="30" Margin="0,0,0,15"/>
+                <!-- Email -->
+                <TextBlock Text="Email" Margin="0,0,0,5" Foreground="#1A1F71" FontWeight="Bold"/>
+                <Border CornerRadius="8" BorderBrush="#0097B2" BorderThickness="2" Background="White" Margin="0,0,0,15">
+                    <TextBox Name="EmailTextBox" Height="40" FontSize="14" Padding="10"
+                             Background="Transparent" BorderThickness="0"/>
+                </Border>
 
-                <TextBlock Text="Password" Margin="0,0,0,5" Foreground="#666"/>
-                <Grid>
-                    <!-- Stack the password and toggle inside a single grid -->
-                    <Grid>
-                        <!-- Hidden Password -->
-                        <PasswordBox x:Name="PasswordBox" Height="30" VerticalAlignment="Top" 
-                     Padding="5,0,35,0" Visibility="Visible"/>
+                <!-- Password -->
+                <!-- Password -->
+                <TextBlock Text="Password" Margin="0,0,0,5" Foreground="#1A1F71" FontWeight="Bold"/>
+                <Grid Margin="0,0,0,10">
+                    <!-- Hidden Password -->
+                    <Border x:Name="PasswordBorder" CornerRadius="8" BorderBrush="#0097B2" BorderThickness="2" Background="White">
+                        <PasswordBox x:Name="PasswordBox" Height="40" FontSize="14" Padding="10,0,40,0"
+                     Background="Transparent" BorderThickness="0" Visibility="Visible"
+                     PasswordChanged="PasswordBox_PasswordChanged"/>
+                    </Border>
 
-                        <!-- Visible Password -->
-                        <TextBox x:Name="VisiblePasswordBox" Height="30" VerticalAlignment="Top" 
-                 Padding="5,0,35,0" Visibility="Collapsed"/>
+                    <!-- Visible Password -->
+                    <Border x:Name="VisiblePasswordBorder" CornerRadius="8" BorderBrush="#0097B2" BorderThickness="2"
+            Background="White" Visibility="Collapsed">
+                        <TextBox x:Name="VisiblePasswordBox" Height="40" FontSize="14" Padding="10,0,40,0"
+                 Background="Transparent" BorderThickness="0" TextChanged="VisiblePasswordBox_TextChanged"/>
+                    </Border>
 
-                        <!-- Toggle Button inside the field -->
-                        <ToggleButton x:Name="ShowPasswordToggle" Content="👁" Width="25" Height="25"
-                      HorizontalAlignment="Right" VerticalAlignment="Center"
-                      Margin="0,0,0,0"
-                      Checked="ShowPasswordToggle_Checked"
-                      Unchecked="ShowPasswordToggle_Unchecked"
-                      Cursor="Hand"
-                      ToolTip="Show/Hide Password" Background="Transparent" BorderBrush="Transparent"/>
-                    </Grid>
+                    <!-- Eye Icon -->
+                    <ToggleButton x:Name="ShowPasswordToggle" Content="👁" Width="30" Height="30"
+                  HorizontalAlignment="Right" VerticalAlignment="Center"
+                  Checked="ShowPasswordToggle_Checked"
+                  Unchecked="ShowPasswordToggle_Unchecked"
+                  Cursor="Hand"
+                  Background="Transparent" BorderBrush="Transparent"/>
                 </Grid>
 
-                <Button Content="Sign Up" 
-                        Height="35" 
-                        Background="#0078D7" 
-                        Foreground="White" 
-                        FontWeight="Bold"
-                        Cursor="Hand"
-                        Margin="0,20,0,0" Click="Button_Click"/>
 
+                <!-- Sign Up Button -->
+                <Button Content="Sign Up"
+                        Height="45"
+                        FontSize="16"
+                        FontWeight="Bold"
+                        Background="#0097B2"
+                        Foreground="White"
+                        BorderThickness="0"
+                        Cursor="Hand"
+                        Click="Button_Click"
+                        Margin="0,20,0,0"/>
+
+                <!-- Redirect Text -->
                 <TextBlock Text="Already have an account? Log in" 
-                HorizontalAlignment="Center" 
-                Margin="0,15,0,0"
-                Foreground="#0078D7"
-                FontSize="12"
-                Cursor="Hand"
-                MouseLeftButtonDown="LoginRedirect_Click"/>
+                           HorizontalAlignment="Center" 
+                           Margin="0,15,0,0"
+                           Foreground="#0097B2"
+                           FontSize="14"
+                           Cursor="Hand"
+                           MouseLeftButtonDown="LoginRedirect_Click"/>
             </StackPanel>
         </Border>
     </Grid>

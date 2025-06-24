@@ -30,15 +30,32 @@ namespace Finals_temp
         {
             VisiblePasswordBox.Text = PasswordBox.Password;
             PasswordBox.Visibility = Visibility.Collapsed;
+            PasswordBorder.Visibility = Visibility.Collapsed;
             VisiblePasswordBox.Visibility = Visibility.Visible;
+            VisiblePasswordBorder.Visibility = Visibility.Visible;
         }
 
         private void ShowPasswordToggle_Unchecked(object sender, RoutedEventArgs e)
         {
             PasswordBox.Password = VisiblePasswordBox.Text;
-            VisiblePasswordBox.Visibility = Visibility.Collapsed;
             PasswordBox.Visibility = Visibility.Visible;
+            PasswordBorder.Visibility = Visibility.Visible;
+            VisiblePasswordBox.Visibility = Visibility.Collapsed;
+            VisiblePasswordBorder.Visibility = Visibility.Collapsed;
         }
+
+        private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (ShowPasswordToggle.IsChecked == true)
+                VisiblePasswordBox.Text = PasswordBox.Password;
+        }
+
+        private void VisiblePasswordBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (ShowPasswordToggle.IsChecked == true)
+                PasswordBox.Password = VisiblePasswordBox.Text;
+        }
+
 
         private void LoginRedirect_Click(object sender, MouseButtonEventArgs e)
         {

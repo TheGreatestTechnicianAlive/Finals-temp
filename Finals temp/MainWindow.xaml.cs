@@ -160,15 +160,33 @@ namespace Finals_temp
         {
             VisiblePasswordBox.Text = pass_txt.Password;
             pass_txt.Visibility = Visibility.Collapsed;
+            PasswordBorder.Visibility = Visibility.Collapsed;
             VisiblePasswordBox.Visibility = Visibility.Visible;
+            VisiblePasswordBorder.Visibility = Visibility.Visible;
         }
 
         private void ShowPasswordToggle_Unchecked(object sender, RoutedEventArgs e)
         {
             pass_txt.Password = VisiblePasswordBox.Text;
-            VisiblePasswordBox.Visibility = Visibility.Collapsed;
             pass_txt.Visibility = Visibility.Visible;
+            PasswordBorder.Visibility = Visibility.Visible;
+            VisiblePasswordBox.Visibility = Visibility.Collapsed;
+            VisiblePasswordBorder.Visibility = Visibility.Collapsed;
         }
+
+        // Keep both inputs in sync
+        private void pass_txt_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (ShowPasswordToggle.IsChecked == true)
+                VisiblePasswordBox.Text = pass_txt.Password;
+        }
+
+        private void VisiblePasswordBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (ShowPasswordToggle.IsChecked == true)
+                pass_txt.Password = VisiblePasswordBox.Text;
+        }
+
 
 
         private void signup_btn_Click(object sender, RoutedEventArgs e)
