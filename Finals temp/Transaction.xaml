@@ -1,71 +1,143 @@
 ﻿<Window x:Class="Finals_temp.Transaction"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Transaction History" Height="800" Width="450" 
+        Title="Transaction History"
+        Height="800"
+        Width="450"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
         Background="#F3F5F9">
 
+    <Window.Resources>
+        <!-- DropShadow for Back Button -->
+        <DropShadowEffect x:Key="BackButtonShadow"
+                          ShadowDepth="1"
+                          Color="Black"
+                          Opacity="0.2"
+                          BlurRadius="6"/>
+
+        <!-- Back Button Style -->
+        <Style x:Key="BackButtonStyle" TargetType="Button">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#0097B2"/>
+            <Setter Property="Width" Value="90"/>
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="5,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="20"
+                                SnapsToDevicePixels="True"
+                                Effect="{DynamicResource BackButtonShadow}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              RecognizesAccessKey="True"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#00F5D4"/>
+                    <Setter Property="Foreground" Value="#1A1F71"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
     <DockPanel Margin="20">
 
         <!-- Bottom Navigation -->
-        <Grid DockPanel.Dock="Bottom" Height="50" Background="White" Margin="0,10,0,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+        <Border DockPanel.Dock="Bottom" Height="75" Background="White" CornerRadius="20" Margin="0,10,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-            <Button Content="📊 Transactions"
-                    Grid.Column="0"
-                    Height="35"
-                    Margin="5,0,5,0"
-                    Background="#0097B2"
-                    Foreground="White"
-                    FontWeight="Bold"
-                    BorderBrush="Transparent"
-                    Cursor="Hand"
-                    Click="TransactionsButton_Click" />
+                <!-- Transactions Button -->
+                <Button Grid.Column="0"
+                        Height="50"
+                        Margin="5"
+                        Background="#0097B2"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        BorderBrush="Transparent"
+                        Cursor="Hand"
+                        Click="TransactionsButton_Click">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}" 
+                                    CornerRadius="15"
+                                    BorderBrush="{TemplateBinding BorderBrush}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                    📊 Transactions
+                </Button>
 
-            <Button Content="🏠 Home"
-                    Grid.Column="1"
-                    Height="35"
-                    Margin="5,0,5,0"
-                    Background="#00F5D4"
-                    Foreground="#1A1F71"
-                    FontWeight="Bold"
-                    BorderBrush="Transparent"
-                    Cursor="Hand"
-                    Click="HomeButton_Click" />
+                <!-- Home Button -->
+                <Button Grid.Column="1"
+                        Height="50"
+                        Margin="5"
+                        Background="#00F5D4"
+                        Foreground="#1A1F71"
+                        FontWeight="Bold"
+                        BorderBrush="Transparent"
+                        Cursor="Hand"
+                        Click="HomeButton_Click">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}" 
+                                    CornerRadius="15"
+                                    BorderBrush="{TemplateBinding BorderBrush}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                    🏠 Home
+                </Button>
 
-            <Button Content="⚙ Options"
-                    Grid.Column="2"
-                    Height="35"
-                    Margin="5,0,5,0"
-                    Background="#1A1F71"
-                    Foreground="White"
-                    FontWeight="Bold"
-                    BorderBrush="Transparent"
-                    Cursor="Hand"
-                    Click="OptionsButton_Click" />
-        </Grid>
+                <!-- Options Button -->
+                <Button Grid.Column="2"
+                        Height="50"
+                        Margin="5"
+                        Background="#1A1F71"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        BorderBrush="Transparent"
+                        Cursor="Hand"
+                        Click="OptionsButton_Click">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}" 
+                                    CornerRadius="15"
+                                    BorderBrush="{TemplateBinding BorderBrush}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                    ⚙ Options
+                </Button>
+            </Grid>
+        </Border>
 
         <!-- Main Content -->
         <StackPanel VerticalAlignment="Top" HorizontalAlignment="Stretch">
 
-            <!-- Back Button -->
+            <!-- Back Button (Styled) -->
             <Button Content="← Back"
                     Click="BackButton_Click"
+                    Style="{StaticResource BackButtonStyle}"
                     HorizontalAlignment="Left"
-                    Margin="0,10,0,20"
-                    Width="90"
-                    Height="35"
-                    Background="#BDC3C7"
-                    Foreground="Black"
-                    FontWeight="Bold"
-                    BorderThickness="0"
-                    Cursor="Hand"
-                    Padding="5,0"/>
+                    Margin="0,10,0,20"/>
 
             <!-- Scrollable Transaction List -->
             <ScrollViewer VerticalScrollBarVisibility="Auto" Height="650">

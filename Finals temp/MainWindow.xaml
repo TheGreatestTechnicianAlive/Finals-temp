@@ -7,6 +7,27 @@
         mc:Ignorable="d"
         Title="Login" Height="800" Width="450" WindowStartupLocation="CenterScreen">
 
+    <Window.Resources>
+        <!-- Rounded Button Style -->
+        <Style x:Key="RoundedLoginButtonStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Height" Value="45"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="12">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
     <Grid>
         <!-- Gradient Background -->
         <Grid.Background>
@@ -25,58 +46,60 @@
                         <ImageBrush ImageSource="/Spend&amp;Track.png" Stretch="Fill"/>
                     </Rectangle.Fill>
                 </Rectangle>
-                
             </StackPanel>
 
             <!-- Username -->
-            <TextBlock Text="Username" Margin="0,10,0,5" FontWeight="Bold" FontSize="16" Foreground="#1A1F71"/>
+            <TextBlock Text="Email" Margin="0,10,0,5" FontWeight="Bold" FontSize="16" Foreground="#1A1F71"/>
             <Border CornerRadius="8" BorderBrush="#0097B2" BorderThickness="2" Background="White">
                 <TextBox x:Name="user_txt" Height="40" FontSize="16" Padding="10"
                          Background="Transparent" BorderThickness="0"/>
             </Border>
 
             <!-- Password -->
-            <!-- Password -->
             <TextBlock Text="Password" Margin="0,15,0,5" FontWeight="Bold" FontSize="16" Foreground="#1A1F71"/>
             <Grid>
                 <!-- Hidden Password -->
                 <Border x:Name="PasswordBorder" CornerRadius="8" BorderBrush="#0097B2" BorderThickness="2" Background="White">
                     <PasswordBox x:Name="pass_txt" Height="40" FontSize="16" Padding="10,0,40,0"
-                     Background="Transparent" BorderThickness="0" Visibility="Visible"
-                     PasswordChanged="pass_txt_PasswordChanged"/>
+                                 Background="Transparent" BorderThickness="0"
+                                 Visibility="Visible" PasswordChanged="pass_txt_PasswordChanged"/>
                 </Border>
 
                 <!-- Visible Password -->
                 <Border x:Name="VisiblePasswordBorder" CornerRadius="8" BorderBrush="#0097B2" BorderThickness="2"
-            Background="White" Visibility="Collapsed">
+                        Background="White" Visibility="Collapsed">
                     <TextBox x:Name="VisiblePasswordBox" Height="40" FontSize="16" Padding="10,0,40,0"
-                 Background="Transparent" BorderThickness="0" TextChanged="VisiblePasswordBox_TextChanged"/>
+                             Background="Transparent" BorderThickness="0" TextChanged="VisiblePasswordBox_TextChanged"/>
                 </Border>
 
                 <!-- Toggle Show Password -->
                 <ToggleButton x:Name="ShowPasswordToggle" Content="👁" Width="30" Height="30"
-                  HorizontalAlignment="Right" VerticalAlignment="Center"
-                  Checked="ShowPasswordToggle_Checked"
-                  Unchecked="ShowPasswordToggle_Unchecked"
-                  Cursor="Hand"
-                  ToolTip="Show/Hide Password"
-                  Background="Transparent" BorderBrush="Transparent"/>
+                              HorizontalAlignment="Right" VerticalAlignment="Center"
+                              Checked="ShowPasswordToggle_Checked"
+                              Unchecked="ShowPasswordToggle_Unchecked"
+                              Cursor="Hand"
+                              ToolTip="Show/Hide Password"
+                              Background="Transparent" BorderBrush="Transparent"/>
             </Grid>
 
-
             <!-- Login Button -->
-            <Button x:Name="login_btn" Content="Login" Width="120" Height="45" Margin="0,20,0,0"
-                    FontSize="16" FontWeight="Bold"
-                    Background="#0097B2" Foreground="White" BorderThickness="0"
-                    Click="login_btn_Click" HorizontalAlignment="Center" Cursor="Hand"/>
+            <Button x:Name="login_btn"
+                    Content="Login"
+                    Width="120"
+                    Margin="0,20,0,0"
+                    Style="{StaticResource RoundedLoginButtonStyle}"
+                    Background="#0097B2"
+                    Click="login_btn_Click"
+                    HorizontalAlignment="Center"/>
 
             <!-- Divider -->
             <Separator Margin="0,20,0,20" Background="#00F5D4" Height="1"/>
 
             <!-- Google Sign-In -->
-            <Button Content="Sign in with Google" Height="45" FontSize="16"
-                    Background="#4285F4" Foreground="White" FontWeight="Bold" BorderThickness="0"
-                    Click="LoginButton_Click" Cursor="Hand"/>
+            <Button Content="Sign in with Google"
+                    Style="{StaticResource RoundedLoginButtonStyle}"
+                    Background="#4285F4"
+                    Click="LoginButton_Click"/>
 
             <!-- Sign Up Prompt -->
             <TextBlock Text="Don't have an account? Sign Up" 
@@ -88,8 +111,11 @@
                        MouseLeftButtonDown="signup_btn_Click"/>
 
             <!-- Status Message -->
-            <TextBlock x:Name="StatusText" TextAlignment="Center" Foreground="Red"
-                       Margin="0,10,0,0" FontSize="14"/>
+            <TextBlock x:Name="StatusText"
+                       TextAlignment="Center"
+                       Foreground="Red"
+                       Margin="0,10,0,0"
+                       FontSize="14"/>
         </StackPanel>
     </Grid>
 </Window>

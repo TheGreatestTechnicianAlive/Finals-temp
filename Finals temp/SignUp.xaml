@@ -7,6 +7,27 @@
         mc:Ignorable="d"
         Title="Sign Up" Height="650" Width="450" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
 
+    <Window.Resources>
+        <!-- Rounded Button Style -->
+        <Style x:Key="RoundedButtonStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Height" Value="45"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="12">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
     <Grid>
         <!-- Background Gradient -->
         <Grid.Background>
@@ -45,42 +66,35 @@
                 </Border>
 
                 <!-- Password -->
-                <!-- Password -->
                 <TextBlock Text="Password" Margin="0,0,0,5" Foreground="#1A1F71" FontWeight="Bold"/>
                 <Grid Margin="0,0,0,10">
                     <!-- Hidden Password -->
                     <Border x:Name="PasswordBorder" CornerRadius="8" BorderBrush="#0097B2" BorderThickness="2" Background="White">
                         <PasswordBox x:Name="PasswordBox" Height="40" FontSize="14" Padding="10,0,40,0"
-                     Background="Transparent" BorderThickness="0" Visibility="Visible"
-                     PasswordChanged="PasswordBox_PasswordChanged"/>
+                                     Background="Transparent" BorderThickness="0"
+                                     Visibility="Visible" PasswordChanged="PasswordBox_PasswordChanged"/>
                     </Border>
 
                     <!-- Visible Password -->
                     <Border x:Name="VisiblePasswordBorder" CornerRadius="8" BorderBrush="#0097B2" BorderThickness="2"
-            Background="White" Visibility="Collapsed">
+                            Background="White" Visibility="Collapsed">
                         <TextBox x:Name="VisiblePasswordBox" Height="40" FontSize="14" Padding="10,0,40,0"
-                 Background="Transparent" BorderThickness="0" TextChanged="VisiblePasswordBox_TextChanged"/>
+                                 Background="Transparent" BorderThickness="0" TextChanged="VisiblePasswordBox_TextChanged"/>
                     </Border>
 
                     <!-- Eye Icon -->
                     <ToggleButton x:Name="ShowPasswordToggle" Content="👁" Width="30" Height="30"
-                  HorizontalAlignment="Right" VerticalAlignment="Center"
-                  Checked="ShowPasswordToggle_Checked"
-                  Unchecked="ShowPasswordToggle_Unchecked"
-                  Cursor="Hand"
-                  Background="Transparent" BorderBrush="Transparent"/>
+                                  HorizontalAlignment="Right" VerticalAlignment="Center"
+                                  Checked="ShowPasswordToggle_Checked"
+                                  Unchecked="ShowPasswordToggle_Unchecked"
+                                  Cursor="Hand"
+                                  Background="Transparent" BorderBrush="Transparent"/>
                 </Grid>
-
 
                 <!-- Sign Up Button -->
                 <Button Content="Sign Up"
-                        Height="45"
-                        FontSize="16"
-                        FontWeight="Bold"
+                        Style="{StaticResource RoundedButtonStyle}"
                         Background="#0097B2"
-                        Foreground="White"
-                        BorderThickness="0"
-                        Cursor="Hand"
                         Click="Button_Click"
                         Margin="0,20,0,0"/>
 

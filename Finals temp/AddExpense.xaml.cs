@@ -94,23 +94,22 @@ namespace Finals_temp
                 {
                     AmountText.Text = "₱0.00";
                 }
-                else if (_inputBuilder.ToString() == "Error")
-                {
-                    AmountText.Text = "Error";
-                }
                 else
                 {
-                    // Try format as currency
-                    if (decimal.TryParse(_inputBuilder.ToString(), out decimal val))
+                    string input = _inputBuilder.ToString();
+
+                    // Try format as currency only if it's a valid number
+                    if (decimal.TryParse(input, out decimal val) && !input.Contains("+") && !input.Contains("-") && !input.Contains("*") && !input.Contains("/"))
                     {
                         AmountText.Text = "₱" + val.ToString("N2");
                     }
                     else
                     {
-                        // Still building expression, show as is
-                        AmountText.Text = "₱" + _inputBuilder.ToString();
+                        // Show the raw input as a math expression
+                        AmountText.Text = "₱" + input;
                     }
                 }
+
             }
         }
 
@@ -175,7 +174,6 @@ namespace Finals_temp
                     };
                     ExpenseAmount = amountDecimal;
                     this.DialogResult = true;
-                    //this.Close();
 
                     // Save to DB
                     db.ExpenseTables.InsertOnSubmit(newExpense);
@@ -183,7 +181,7 @@ namespace Finals_temp
 
                     // Confirmation
                     MessageBox.Show(
-    $"Saved:\nID: {newId}\nCategory: {categoryName}\nDate: {DateTime.Today:MMMM dd, yyyy}\nAmount: ₱{amountDecimal:N2}\nNotes: {notes}",
+    $"Saved:\nCategory: {categoryName}\nDate: {DateTime.Today:MMMM dd, yyyy}\nAmount: ₱{amountDecimal:N2}\nNotes: {notes}",
     "Expense Saved", MessageBoxButton.OK, MessageBoxImage.Information);
 
                 }
